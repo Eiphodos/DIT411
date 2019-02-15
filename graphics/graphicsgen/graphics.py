@@ -26,9 +26,11 @@ class HelloWorld(cocos.layer.Layer):
             font_size=32,
             anchor_x='center', anchor_y='center'
         )
+        label.position = 320, 240
         self.add(label)
-        cocos.director.director.init()
 
+
+cocos.director.director.init()
 hello_layer = HelloWorld()
 main_scene = cocos.scene.Scene(hello_layer)
 cocos.director.director.run(main_scene)
