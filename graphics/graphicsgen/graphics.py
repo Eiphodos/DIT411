@@ -31,10 +31,11 @@ class Entity:
 
     def tickChange(self, string):
         changeValues = str.split(string, "|")
+        posValues = str.split(changeValues[1], ",")
         if(changeValues[0] == self.index):
-            self.posX = changeValues[1]
-            self.posY = changeValues[2]
-            self.rot = changeValues[3]
+            self.posX = posValues[0]
+            self.posY = posValues[1]
+            self.rot = changeValues[2]
 
 
 class ticks:
@@ -72,7 +73,7 @@ entitiesState = entities.getEntities()
 for x in range(0, 100):
     entities.updateWithTick(fullData.getTickInfo(0, x))
     entitiesState = entities.getEntities()
-    print("PosX: " + str(entitiesState[0].posX) + " PosY: " + str(entitiesState[0].posY))
+    print("PosX: " + str(entitiesState[0].posX) + " PosY: " + str(entitiesState[0].posY) + " Rot: " + str(entitiesState[0].rot))
 
 
 print(fullData.getTickInfo(0, 1))

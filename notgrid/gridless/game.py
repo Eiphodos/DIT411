@@ -51,7 +51,7 @@ class Entity:
         tempString = ""
         tempString += str(self.index) + "|"
         #tempString += str(self.animal) + "|"
-        tempString += str(round(self.posX, 3)) + "," + str(round(self.posX, 3)) + "|"
+        tempString += str(round(self.posX, 3)) + "," + str(round(self.posY, 3)) + "|"
         tempString += str(round(self.rot, 3)) + "|"
         #tempString += str(round(self.length, 3)) + "," + str(round(self.width, 3))
         return tempString + "O"
