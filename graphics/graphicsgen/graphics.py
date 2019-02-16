@@ -1,4 +1,22 @@
 import cocos
+class Entities:
+    def __init__(self, intText):
+        self.entityList = []
+        for infoText in str.split(intText, "O"):
+            if (infoText != ""):
+                self.entityList.append(Entity(infoText))
+
+
+    def updateWithTick(self, string):
+        var = 0
+        for infoText in str.split(string, "O"):
+            if (infoText != ""):
+                self.entityList[var].tickChange(infoText)
+            var += 1
+
+    def getEntities(self):
+        return self.entityList
+
 class Entity:
     def __init__(self, intText):
         initValues = str.split(intText, "|")
@@ -44,15 +62,18 @@ class data:
 f = open("Output.txt", "r")
 
 text = str.split(f.read(), "B")
-entityList = []
+
+entities = Entities(text[0])
 
 fullData = data(text[1])
 
+entitiesState = entities.getEntities()
 
+for x in range(0, 100):
+    entities.updateWithTick(fullData.getTickInfo(0, x))
+    entitiesState = entities.getEntities()
+    print("PosX: " + str(entitiesState[0].posX) + " PosY: " + str(entitiesState[0].posY))
 
-for intText in str.split(text[0], "O"):
-    if(intText != ""):
-        entityList.append(Entity(intText))
 
 print(fullData.getTickInfo(0, 1))
 print(fullData.getTickInfo(0, 50))
