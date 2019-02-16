@@ -48,28 +48,41 @@ class Entity:
         self.rot = rotationChange*self.rotationSpeed
 
     def asString(self):
-        tempString = "["
+        tempString = ""
+        tempString += str(self.index) + "|"
+        #tempString += str(self.animal) + "|"
+        tempString += str(round(self.posX, 3)) + "," + str(round(self.posX, 3)) + "|"
+        tempString += str(round(self.rot, 3)) + "|"
+        #tempString += str(round(self.length, 3)) + "," + str(round(self.width, 3))
+        return tempString + "O"
+
+    def objectInf(self):
+        tempString = ""
         tempString += str(self.index) + "|"
         tempString += str(self.animal) + "|"
-        tempString += "(" + str(round(self.posX, 3)) + "," + str(round(self.posX, 3)) + ")" + "|"
-        tempString += str(round(self.rot, 3)) + "|"
-        tempString += "(" + str(round(self.length, 3)) + "," + str(round(self.width, 3)) + ")" + "]"
-        return tempString
-
+        tempString += str(round(self.length, 3)) + "," + str(round(self.width, 3))
+        return tempString + "O"
 
 p1 = Entity("Wolf", 0, 0, 0, 270, 20, 10, 1)
-p2 = Entity("Wolf", 0, 0, 0, 270, 20, 10, 1)
+p2 = Entity("Wolf", 0, 0, 0, 270, 20, 10, 2)
 
 saveFile = ""
 
 for y in range(0, 10):
-    for x in range(0, 100):
+    for x in range(0, 10000):
         p1.inputChange()
         p1.move()
         p2.inputChange()
         p2.move()
-        saveFile += "T" + str(x) + "[" + "O[" + p1.asString() + p2.asString() + "L[]]"
+        saveFile += "T" + p1.asString() + p2.asString()
     saveFile += "\n"
 
+endFile = ""
+
+endFile = p1.objectInf() + p2.objectInf() + "B"
+
+endFile += saveFile
+
+
 with open("Output.txt", "w") as text_file:
-    text_file.write(saveFile)
+    text_file.write(endFile)
