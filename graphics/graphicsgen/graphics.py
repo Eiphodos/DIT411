@@ -1,4 +1,7 @@
 import cocos
+import time
+from cocos      import euclid
+from cocos    import draw
 class Entities:
     def __init__(self, intText):
         self.entityList = []
@@ -82,20 +85,33 @@ print(fullData.getTickInfo(0, 100))
 
 
 
-#class HelloWorld(cocos.layer.Layer):
-#    def __init__(self):
-#        super(HelloWorld, self).__init__()
-#        label = cocos.text.Label(
-#            'Hello, world',
-#            font_name='Times New Roman',
-#            font_size=32,
-#            anchor_x='center', anchor_y='center'
-#        )
-#        label.position = 320, 240
-#        self.add(label)
-#
-#
-#cocos.director.director.init()
-#hello_layer = HelloWorld()
-#main_scene = cocos.scene.Scene(hello_layer)
-#cocos.director.director.run(main_scene)
+class HelloWorld(cocos.layer.Layer):
+    def __init__(self, animals, pos):
+        super(HelloWorld, self).__init__()
+        self.label = cocos.text.Label(
+            'Hello, world',
+            font_name='Times New Roman',
+            font_size=32,
+            anchor_x='center', anchor_y='center'
+        )
+        self.label.position = pos, pos
+        self.rect = cocos.sprite.Sprite("Wolf.png")
+        self.rect.position = 320, 240
+        self.rect.scale = 0.5
+
+        self.add(self.rect)
+        self.add(self.label)
+    def draw(self):
+        self.rect = 50, 50
+
+
+
+cocos.director.director.init()
+
+for x in range(0, 500):
+    hello_layer = HelloWorld(entitiesState, x)
+    main_scene = cocos.scene.Scene(hello_layer)
+    cocos.director.director.run(main_scene)
+    time.sleep(0.300)
+    print("Update")
+
