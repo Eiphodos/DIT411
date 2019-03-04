@@ -7,6 +7,8 @@ from cocos.director import director
 from cocos import draw
 
 
+
+
 def distanceToObject(radius, objPos, line1, line2):
 
     x = np.array(objPos)
@@ -38,17 +40,6 @@ def distanceToObject(radius, objPos, line1, line2):
 
     else:
         return -1;
-
-radius = 30
-objPos = (240.0, 175.0)
-visionLength = 100
-
-wallLines = [
-    [(10, 10), (10, 400)],
-    [(400, 10), (400, 400)],
-    [(10, 10), (400, 10)],
-    [(10, 400), (400, 400)]
-]
 
 def createLines(nLines, lineLength, fieldOfView, startAngle, orgin):
     startX = orgin[0]
@@ -104,23 +95,36 @@ def distanceFromWall(visionLine):
             xDeltaEnd = visionLine[1][0] - intersection[0]
             yDeltaEnd = visionLine[1][1] - intersection[1]
 
-            distanceEnd = math.sqrt( xDeltaEnd*xDeltaEnd + yDeltaEnd*yDeltaEnd )
+            distanceEnd = math.sqrt( xDeltaEnd**2 + yDeltaEnd**2 )
 
 
             if(distanceEnd <= visionLength):
                 xDelta = visionLine[0][0] - intersection[0]
                 yDelta = visionLine[0][1] - intersection[1]
 
-                distance = math.sqrt( xDelta*xDelta + yDelta*yDelta )
+                distance = math.sqrt( xDelta**2 + yDelta**2 )
 
                 closestDistance = min(closestDistance, distance)
 
     return closestDistance;
 
+radius = 30
+objPos = (240.0, 175.0)
+visionLength = 100
+fieldOfVision = 270
+nVisionLines = 27
+
+wallLines = [
+    [(10, 10), (10, 400)],
+    [(400, 10), (400, 400)],
+    [(10, 10), (400, 10)],
+    [(10, 400), (400, 400)]
+]
+
 x = line_intersection( (wallLines[0][0], wallLines[0][1]), (wallLines[1][0], wallLines[1][1]))
 
-lines =             createLines(27, visionLength, 270, 0, (200.0, 150.0))
-wallVisionLines =   createLines(27, visionLength, 270, 30, (350.0, 350.0))
+lines =             createLines(nVisionLines, visionLength, fieldOfVision, 0, (200.0, 150.0))
+wallVisionLines =   createLines(nVisionLines, visionLength, fieldOfVision, 30, (350.0, 350.0))
 
 sheepLines = createLines(200, radius, 360, 0, objPos)
 
