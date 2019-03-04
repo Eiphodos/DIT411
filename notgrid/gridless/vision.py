@@ -113,6 +113,9 @@ objPos = (240.0, 175.0)
 visionLength = 100
 fieldOfVision = 270
 nVisionLines = 27
+wolfPosition = (350, 200)
+wolfRotation = -30
+
 
 wallLines = [
     [(10, 10), (10, 400)],
@@ -123,10 +126,12 @@ wallLines = [
 
 x = line_intersection( (wallLines[0][0], wallLines[0][1]), (wallLines[1][0], wallLines[1][1]))
 
-lines =             createLines(nVisionLines, visionLength, fieldOfVision, 0, (200.0, 150.0))
-wallVisionLines =   createLines(nVisionLines, visionLength, fieldOfVision, 30, (350.0, 350.0))
+lines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
+wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
 
 sheepLines = createLines(200, radius, 360, 0, objPos)
+
+wolfVision = []
 
 class TestLayer(cocos.layer.Layer):
     def __init__(self):
@@ -137,10 +142,11 @@ class TestLayer(cocos.layer.Layer):
             dist = distanceToObject(radius, objPos, lines[lineIndex][0], lines[lineIndex][1]);
 
 
+
             if(dist < 0):
                 #no hit
                 line = draw.Line((lines[lineIndex][0][0], lines[lineIndex][0][1]), (lines[lineIndex][1][0], lines[lineIndex][1][1]),
-                (255, 255, 255, 255))
+                (255, 255, 255, 64))
             else:
                 #hit
                 line = draw.Line((lines[lineIndex][0][0], lines[lineIndex][0][1]), (lines[lineIndex][1][0], lines[lineIndex][1][1]),
@@ -156,7 +162,7 @@ class TestLayer(cocos.layer.Layer):
             if(dist < 0 or dist > visionLength):
                 #no hit
                 line = draw.Line((wallVisionLines[lineIndex][0][0], wallVisionLines[lineIndex][0][1]), (wallVisionLines[lineIndex][1][0], wallVisionLines[lineIndex][1][1]),
-                (255, 255, 255, 255))
+                (255, 255, 255, 64))
             else:
                 #hit and is < visionlength from orgin
 
