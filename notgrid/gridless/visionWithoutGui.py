@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import time
 
 def distanceToObject(radius, objPos, line1, line2):
 
@@ -171,8 +172,15 @@ def main():
 
             wolfVision.append(partOFMaxDistance)
 
-    for i in range(len(wolfVision)):
-        print("wolfVision " + str(i) + ":" + str(wolfVision[i]))
+    #for i in range(len(wolfVision)):
+    #    print("wolfVision " + str(i) + ":" + str(wolfVision[i]))
 
 if __name__ == '__main__':
-    main()
+    start_time = time.time()
+    ticks = 10000;
+
+    print("testing iterations: " + str(ticks))
+    for value in range(10000):
+        main()
+
+    print("--- %s seconds ---" % (time.time() - start_time))
