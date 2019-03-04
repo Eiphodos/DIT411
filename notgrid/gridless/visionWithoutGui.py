@@ -2,15 +2,16 @@ import numpy as np
 import math
 import time
 
-def distanceToObject(radius, objPos, line1, line2):
+def distanceToObject(radius, objPos, line1, line2, visionLength):
 
     x = np.array(objPos)
-
     u = np.array(line1)
     v = np.array(line2)
 
     n = v - u
-    n /= np.linalg.norm(n, 2)
+
+    #n /= np.linalg.norm(n, 2)
+    n /= visionLength
 
     intersectPos = u + n*np.dot(x - u, n)
 
@@ -106,6 +107,9 @@ wolfRotation = -30
 wolfPositions = []
 wolfPositions.append((350, 275))
 wolfPositions.append((350, 150))
+wolfPositions.append((125, 150))
+wolfPositions.append((125, 382))
+wolfPositions.append((113, 39))
 
 wallLines = [
     [(10, 10), (10, 400)],
@@ -121,10 +125,11 @@ sheepLines = createLines(150, radius, 360, 0, sheepPosition)
 
 wolfVision = []
 
-def main():
+def getWolfVision(wolfIndexPassed):
+    wolfVision = []
     #lines towards sheep
     for lineIndex in range(nVisionLines):
-        dist = distanceToObject(radius, sheepPosition, lines[lineIndex][0], lines[lineIndex][1]);
+        dist = distanceToObject(radius, sheepPosition, lines[lineIndex][0], lines[lineIndex][1], visionLength);
 
         partOFMaxDistance = dist/float(visionLength + radius);
         partOFMaxDistance = max(0, partOFMaxDistance)
@@ -141,16 +146,26 @@ def main():
 
         for wolfIndex in range(len(wolfPositions)):
 
-            dist = distanceToObject(radius, wolfPositions[wolfIndex], lines[lineIndex][0], lines[lineIndex][1]);
 
-            partOFMaxDistance = dist/float(visionLength + radius);
-            partOFMaxDistance = max(0, partOFMaxDistance)
-            partOFMaxDistance = min(1, partOFMaxDistance)
+            if(wolfIndex != wolfIndexPassed):
+                currentPosition = wolfPositions[wolfIndexPassed]
+                wolfPosition = wolfPositions[wolfIndex]
 
-            if(partOFMaxDistance > 0):
-                partOFMaxDistance = 1 - partOFMaxDistance;
+                xDelta = currentPosition[0]-wolfPosition[0]
+                yDelta = currentPosition[1]-wolfPosition[1]
 
-            maxPartOfMaxDistance = max(maxPartOfMaxDistance, partOFMaxDistance)
+                distance = math.sqrt(xDelta**2 + yDelta**2)
+                if (distance < visionLength + radius):
+                    dist = distanceToObject(radius, wolfPositions[wolfIndex], lines[lineIndex][0], lines[lineIndex][1], visionLength);
+
+                    partOFMaxDistance = dist/float(visionLength + radius);
+                    partOFMaxDistance = max(0, partOFMaxDistance)
+                    partOFMaxDistance = min(1, partOFMaxDistance)
+
+                    if(partOFMaxDistance > 0):
+                        partOFMaxDistance = 1 - partOFMaxDistance;
+
+                    maxPartOfMaxDistance = max(maxPartOfMaxDistance, partOFMaxDistance)
 
         wolfVision.append(maxPartOfMaxDistance)
 
@@ -172,15 +187,16 @@ def main():
 
             wolfVision.append(partOFMaxDistance)
 
+    return wolfVision;
     #for i in range(len(wolfVision)):
     #    print("wolfVision " + str(i) + ":" + str(wolfVision[i]))
 
 if __name__ == '__main__':
     start_time = time.time()
-    ticks = 10000;
+    ticks = 100000;
 
     print("testing iterations: " + str(ticks))
-    for value in range(10000):
-        main()
+    for i in range(ticks):
+        getWolfVision(0)
 
     print("--- %s seconds ---" % (time.time() - start_time))
