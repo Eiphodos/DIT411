@@ -6,9 +6,6 @@ import cocos
 from cocos.director import director
 from cocos import draw
 
-
-
-
 def distanceToObject(radius, objPos, line1, line2):
 
     x = np.array(objPos)
@@ -22,7 +19,6 @@ def distanceToObject(radius, objPos, line1, line2):
     intersectPos = u + n*np.dot(x - u, n)
 
     distanceLineToObject = math.sqrt( (intersectPos[0] - objPos[0])**2 + (intersectPos[1] - objPos[1])**2 )
-
 
     lineLength = math.sqrt( (line1[0] - line2[0])**2 + (line1[1] - line2[1])**2 )
     distToline1 = math.sqrt( (line1[0] - objPos[0])**2 + (line1[1] - objPos[1])**2 )
@@ -63,7 +59,6 @@ def createLines(nLines, lineLength, fieldOfView, startAngle, orgin):
     return lines
 
 def line_intersection(line1, line2):
-
     xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
     ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
 
@@ -81,9 +76,6 @@ def line_intersection(line1, line2):
     return x, y
 
 def distanceFromWall(visionLine):
-
-    length = len(wallLines);
-
     closestDistance = 1000000000;
 
     for lineIndex in range(len(wallLines)):
@@ -97,7 +89,6 @@ def distanceFromWall(visionLine):
 
             distanceEnd = math.sqrt( xDeltaEnd**2 + yDeltaEnd**2 )
 
-
             if(distanceEnd <= visionLength):
                 xDelta = visionLine[0][0] - intersection[0]
                 yDelta = visionLine[0][1] - intersection[1]
@@ -109,13 +100,16 @@ def distanceFromWall(visionLine):
     return closestDistance;
 
 radius = 30
-objPos = (240.0, 175.0)
+sheepPosition = (240.0, 175.0)
 visionLength = 100
 fieldOfVision = 270
 nVisionLines = 27
 wolfPosition = (350, 200)
 wolfRotation = -30
 
+wolfPositions = []
+wolfPositions.append((350, 275))
+wolfPositions.append((350, 150))
 
 wallLines = [
     [(10, 10), (10, 400)],
@@ -124,12 +118,10 @@ wallLines = [
     [(10, 400), (400, 400)]
 ]
 
-x = line_intersection( (wallLines[0][0], wallLines[0][1]), (wallLines[1][0], wallLines[1][1]))
-
 lines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
 wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
 
-sheepLines = createLines(200, radius, 360, 0, objPos)
+sheepLines = createLines(150, radius, 360, 0, sheepPosition)
 
 wolfVision = []
 
@@ -138,10 +130,17 @@ class TestLayer(cocos.layer.Layer):
         super().__init__()
 
         #lines towards sheep
-        for lineIndex in range(len(lines)):
-            dist = distanceToObject(radius, objPos, lines[lineIndex][0], lines[lineIndex][1]);
+        for lineIndex in range(nVisionLines):
+            dist = distanceToObject(radius, sheepPosition, lines[lineIndex][0], lines[lineIndex][1]);
 
+            partOFMaxDistance = dist/float(visionLength + radius);
+            partOFMaxDistance = max(0, partOFMaxDistance)
+            partOFMaxDistance = min(1, partOFMaxDistance)
 
+            if(partOFMaxDistance > 0):
+                partOFMaxDistance = 1 - partOFMaxDistance;
+
+            wolfVision.append(partOFMaxDistance)
 
             if(dist < 0):
                 #no hit
@@ -154,10 +153,50 @@ class TestLayer(cocos.layer.Layer):
 
             self.add(line)
 
+        #lines towards wolf
+        for lineIndex in range(nVisionLines):
+            maxPartOfMaxDistance = 0;
+
+            for wolfIndex in range(len(wolfPositions)):
+
+                dist = distanceToObject(radius, wolfPositions[wolfIndex], lines[lineIndex][0], lines[lineIndex][1]);
+
+                partOFMaxDistance = dist/float(visionLength + radius);
+                partOFMaxDistance = max(0, partOFMaxDistance)
+                partOFMaxDistance = min(1, partOFMaxDistance)
+
+                if(partOFMaxDistance > 0):
+                    partOFMaxDistance = 1 - partOFMaxDistance;
+
+                maxPartOfMaxDistance = max(maxPartOfMaxDistance, partOFMaxDistance)
+
+                if(dist < 0):
+                    #no hit
+                    line = draw.Line((lines[lineIndex][0][0], lines[lineIndex][0][1]), (lines[lineIndex][1][0], lines[lineIndex][1][1]),
+                    (255, 255, 255, 0))
+                else:
+                    #hit
+                    line = draw.Line((lines[lineIndex][0][0], lines[lineIndex][0][1]), (lines[lineIndex][1][0], lines[lineIndex][1][1]),
+                    (0, 0, 255, 255))
+
+                self.add(line)
+
+            wolfVision.append(maxPartOfMaxDistance)
 
         #lines towards walls
-        for lineIndex in range(len(wallVisionLines)):
+        for lineIndex in range(nVisionLines):
             dist = distanceFromWall(wallVisionLines[lineIndex]);
+
+            partOFMaxDistance = dist/float(visionLength);
+            partOFMaxDistance = min(1, partOFMaxDistance)
+            partOFMaxDistance = max(0, partOFMaxDistance)
+
+            if(partOFMaxDistance > 0):
+                partOFMaxDistance = 1 - partOFMaxDistance;
+
+            wolfVision.append(partOFMaxDistance)
+
+            #print("array value: " + str(partOFMaxDistance))
 
             if(dist < 0 or dist > visionLength):
                 #no hit
@@ -191,6 +230,9 @@ class TestLayer(cocos.layer.Layer):
         self.add(line)
         line = draw.Line(wallLines[3][0], wallLines[3][1], (255, 255, 0, 255))
         self.add(line)
+
+        for i in range(len(wolfVision)):
+            print("wolfVision " + str(i) + ":" + str(wolfVision[i]))
 
 def main():
     director.init()
