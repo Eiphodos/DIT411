@@ -29,8 +29,6 @@ def distanceToObject(radius, objPos, line1, line2):
     if(distanceLineToObject <= radius):
         orginToIntersectDistance = math.sqrt( (line1[0] - intersectPos[0])**2 + (line1[1] - intersectPos[1])**2 )
 
-        print( "intersect: " + str(orginToIntersectDistance) + " atttttt: " + str(intersectPos) )
-
         if(orginToIntersectDistance < lineLength and distToline1 <= lineLength + radius and distToline2 <= lineLength + radius):
             return (orginToIntersectDistance)
         elif(distToline1 <= radius or distToline2 <= radius):
@@ -89,8 +87,6 @@ def line_intersection(line1, line2):
     x = det(d, xdiff) / div
     y = det(d, ydiff) / div
 
-    print("x: " + str( x ))
-    print("y: " + str( y ))
     return x, y
 
 def distanceFromWall(visionLine):
@@ -103,7 +99,6 @@ def distanceFromWall(visionLine):
         intersection = line_intersection( (wallLines[lineIndex][0], wallLines[lineIndex][1]), (visionLine[0], visionLine[1]))
 
         if (intersection == "none"):
-            print("returning -1")
             return -1;
         else:
             xDeltaEnd = visionLine[1][0] - intersection[0]
@@ -154,9 +149,6 @@ class TestLayer(cocos.layer.Layer):
         for lineIndex in range(len(wallVisionLines)):
             dist = distanceFromWall(wallVisionLines[lineIndex]);
 
-            print("distance to wall: " + str( dist ))
-
-
             if(dist < 0 or dist > visionLength):
                 #no hit
                 line = draw.Line((wallVisionLines[lineIndex][0][0], wallVisionLines[lineIndex][0][1]), (wallVisionLines[lineIndex][1][0], wallVisionLines[lineIndex][1][1]),
@@ -172,9 +164,6 @@ class TestLayer(cocos.layer.Layer):
                 ( 255 , 0, 0, 255))
 
             self.add(line)
-
-
-
 
         #draw sheep
 
