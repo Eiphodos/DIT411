@@ -320,9 +320,9 @@ def train_networks(model1, model2, model3, start):
             avg_steps_per_catch = iteration / catches
 
         if iteration % 25000 == 0:
-            torch.save(model1, "pretrained_model/current_model1_" + str(iteration) + ".pth")
-            torch.save(model2, "pretrained_model/current_model2_" + str(iteration) + ".pth")
-            torch.save(model3, "pretrained_model/current_model3_" + str(iteration) + ".pth")
+            torch.save(model1, "trained_model/current_model1_" +  str(iteration) +  ".pth")
+            torch.save(model2, "trained_model/current_model2_" +  str(iteration) +  ".pth")
+            torch.save(model3, "trained_model/current_model3_" +  str(iteration) +  ".pth")
 
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "epsilon:", epsilon1, "action:",
                 action_index_1.cpu().detach().numpy(), "reward:", reward1.numpy()[0][0], "Q max:",
