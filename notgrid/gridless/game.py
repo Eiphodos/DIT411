@@ -99,7 +99,7 @@ def distanceFromWall(visionLine):
     return closestDistance;
 
 radius = 30
-sheepPosition = (240.0, 175.0)
+sheepPosition = [240.0, 175.0]
 visionLength = 100
 fieldOfVision = 270
 nVisionLines = 27
@@ -220,6 +220,7 @@ class Entity:
         rotTemp = self.rot%360
         speedX = math.cos(rotTemp * math.pi/180)*self.speed
         speedY = math.sin(rotTemp * math.pi/180)*self.speed
+
         self.posX += speedX
         self.posY += speedY
 
@@ -234,8 +235,8 @@ class Entity:
             self.speedChange((random.randrange(-10, 10)/10.0))
             self.rotationChange(random.randrange(-3600, 3600)/10.0)
 
-            sheepPosition = (self.posX, self.posY)
-            #TODO include vision
+            sheepPosition[0] = self.posX
+            sheepPosition[1] = self.posY
 
     def speedChange(self, speedChange):
         if(self.speed + speedChange < 0):
@@ -278,6 +279,9 @@ animals.append(Entity("Sheep", 0, 0, 0, 270, 20, 10, 4))
 saveFile = ""
 
 for y in range(0, 10):
+
+    #TODO reset positions between generations
+
     for x in range(0, 1000):
         saveFile += "T"
 
