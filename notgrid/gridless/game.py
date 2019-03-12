@@ -125,6 +125,7 @@ wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRot
 
 
 def getWolfVision(wolfIndexPassed):
+
     wolfVision = []
     #lines towards sheep
     for lineIndex in range(nVisionLines):
@@ -207,6 +208,13 @@ class Entity:
             self.minspeed = -1
             self.animal = 1
             self.rotationSpeed = 1.0/6
+        elif(animal == "Sheep"):
+            self.acceleration = 1
+            self.deceleration = 0.5
+            self.maxspeed = 2
+            self.minspeed = -1
+            self.animal = 2
+            self.rotationSpeed = 1.0/6
 
     def move(self):
         rotTemp = self.rot%360
@@ -220,6 +228,14 @@ class Entity:
             self.speedChange((random.randrange(-10, 10)/10.0))
             self.rotationChange(random.randrange(-3600, 3600)/10.0)
 
+            getWolfVision(self.index)
+
+        elif(self.animal == 2):
+            self.speedChange((random.randrange(-10, 10)/10.0))
+            self.rotationChange(random.randrange(-3600, 3600)/10.0)
+
+            sheepPosition = (self.posX, self.posY)
+            #TODO include vision
 
     def speedChange(self, speedChange):
         if(self.speed + speedChange < 0):
@@ -256,11 +272,13 @@ animals = []
 
 animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 1))
 animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 2))
+animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 3))
+animals.append(Entity("Sheep", 0, 0, 0, 270, 20, 10, 4))
 
 saveFile = ""
 
 for y in range(0, 10):
-    for x in range(0, 10000):
+    for x in range(0, 1000):
         saveFile += "T"
 
         for i in range (len(animals)):
