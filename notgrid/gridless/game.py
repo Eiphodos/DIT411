@@ -1,6 +1,7 @@
 import math
 import random
 import numpy as np
+import torch
 
 def distanceToObject(radius, objPos, line1, line2, visionLength):
 
@@ -107,7 +108,7 @@ wolfPosition = (350, 200)
 wolfRotation = -30
 
 #set to 0 for no print 1 for print
-debug = 0
+debug = 1
 
 wolfPositions = []
 wolfPositions.append((350, 275))
@@ -130,12 +131,13 @@ wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRot
 def getWolfVision(wolfIndexPassed):
 
     wolf = animals[wolfIndexPassed - 1];
+    currentPosition = (wolf.posX, wolf.posY)
 
-    lines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, (wolf.posX, wolf.posY))
+    lines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, currentPosition)
 
     wolfVision = []
 
-    #TODO multiple sheep?   -   animals[i].animal == 2
+    #TODO multiple sheep?   - like wolves but animals[i].animal == 2
 
     #lines towards sheep
     for lineIndex in range(nVisionLines):
@@ -160,15 +162,14 @@ def getWolfVision(wolfIndexPassed):
             #not self and is wolf
             if( wolfIndex != wolfIndexPassed and animals[wolfIndex].animal == 1):
 
-                currentPosition = wolfPositions[wolfIndexPassed]
-                wolfPosition = wolfPositions[wolfIndex]
+                wolfPosition = (animals[wolfIndex].posX, animals[wolfIndex].posY)
 
                 xDelta = currentPosition[0]-wolfPosition[0]
                 yDelta = currentPosition[1]-wolfPosition[1]
 
                 distance = math.sqrt(xDelta**2 + yDelta**2)
                 if (distance < visionLength + radius):
-                    dist = distanceToObject(radius, wolfPositions[wolfIndex], lines[lineIndex][0], lines[lineIndex][1], visionLength);
+                    dist = distanceToObject(radius, wolfPosition, lines[lineIndex][0], lines[lineIndex][1], visionLength);
 
                     partOFMaxDistance = dist/float(visionLength + radius);
                     partOFMaxDistance = max(0, partOFMaxDistance)
