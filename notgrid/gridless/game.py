@@ -106,6 +106,9 @@ nVisionLines = 27
 wolfPosition = (350, 200)
 wolfRotation = -30
 
+#set to 0 for no print 1 for print
+debug = 0
+
 wolfPositions = []
 wolfPositions.append((350, 275))
 wolfPositions.append((350, 150))
@@ -126,7 +129,14 @@ wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRot
 
 def getWolfVision(wolfIndexPassed):
 
+    wolf = animals[wolfIndexPassed - 1];
+
+    lines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, (wolf.posX, wolf.posY))
+
     wolfVision = []
+
+    #TODO multiple sheep?   -   animals[i].animal == 2
+
     #lines towards sheep
     for lineIndex in range(nVisionLines):
         dist = distanceToObject(radius, sheepPosition, lines[lineIndex][0], lines[lineIndex][1], visionLength);
@@ -142,12 +152,14 @@ def getWolfVision(wolfIndexPassed):
 
     #lines towards wolf
     for lineIndex in range(nVisionLines):
+
         maxPartOfMaxDistance = 0;
 
-        for wolfIndex in range(len(wolfPositions)):
+        for wolfIndex in range(len(animals)):
 
+            #not self and is wolf
+            if( wolfIndex != wolfIndexPassed and animals[wolfIndex].animal == 1):
 
-            if(wolfIndex != wolfIndexPassed):
                 currentPosition = wolfPositions[wolfIndexPassed]
                 wolfPosition = wolfPositions[wolfIndex]
 
@@ -229,7 +241,15 @@ class Entity:
             self.speedChange((random.randrange(-10, 10)/10.0))
             self.rotationChange(random.randrange(-3600, 3600)/10.0)
 
-            getWolfVision(self.index)
+            vision = getWolfVision(self.index)
+
+            if(debug):
+                for i in range(81):
+                    value = vision[i]
+                    if (value != 0):
+                        print(vision[i])
+
+                print("_______________________________________________")
 
         elif(self.animal == 2):
             self.speedChange((random.randrange(-10, 10)/10.0))
@@ -271,10 +291,10 @@ class Entity:
 
 animals = []
 
-animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 1))
+animals.append(Entity("Sheep", 0, 0, 0, 270, 20, 10, 1))
 animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 2))
 animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 3))
-animals.append(Entity("Sheep", 0, 0, 0, 270, 20, 10, 4))
+animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 4))
 
 saveFile = ""
 
@@ -283,6 +303,10 @@ for y in range(0, 10):
     #TODO reset positions between generations
 
     for x in range(0, 1000):
+
+        if(debug):
+            print("iteration: " + str(x))
+
         saveFile += "T"
 
         for i in range (len(animals)):
