@@ -111,14 +111,20 @@ wolfPosition = (350, 200)
 wolfRotation = -30
 
 #set to 0 for no print 1 for print
-debug = 0
+debug = 1
+
+#limits
+bottomLimit = 0
+topLimit = 1000
+leftLimit = 0
+rightLimit = 1000
 
 
 wallLines = [
-    [(10, 10), (10, 400)],
-    [(400, 10), (400, 400)],
-    [(10, 10), (400, 10)],
-    [(10, 400), (400, 400)]
+    [(leftLimit, bottomLimit), (leftLimit, topLimit)],
+    [(rightLimit, bottomLimit), (rightLimit, topLimit)],
+    [(leftLimit, bottomLimit), (rightLimit, bottomLimit)],
+    [(leftLimit, topLimit), (rightLimit, topLimit)]
 ]
 
 lines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
@@ -235,6 +241,12 @@ class Entity:
 
         self.posX += speedX
         self.posY += speedY
+
+        self.posX = max(self.posX, leftLimit)
+        self.posX = min(self.posX, rightLimit)
+
+        self.posY = max(self.posY, bottomLimit)
+        self.posY = min(self.posY, topLimit)
 
     def inputChange(self):
         if(self.animal == 1):
