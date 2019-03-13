@@ -1,6 +1,26 @@
 import math
 import random
 import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import torchvision.transforms as T
+from collections import namedtuple
+
+# if gpu is to be used
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+Transition = namedtuple('Transition',
+ ('state', 'action', 'next_state', 'reward'))
+
+class DQN(nn.Module):
+
+    def basic_policy(self):
+        print("action")
+            #take action
+
 
 
 def distanceToObject(radius, objPos, line1, line2, visionLength):
