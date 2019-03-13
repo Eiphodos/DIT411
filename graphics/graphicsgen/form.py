@@ -80,24 +80,22 @@ class ComputerVisionAlgorithm(BaseWidget):
         #Define the button action
         self._button1.value = self.__buttonAction
 
+
+
+    def test(self):
+        print(time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime()))
+        self.fourcc = VideoWriter_fourcc(*'MP42')
+        self.frame = np.random.randint(0, 256, (self.height, self.width, 3), dtype=np.uint8)
+        self._image.value = self.frame
+
     def __buttonAction(self):
         """Button action event"""
         self._info.value =   self._gen.value +" "+   self._tick.value + " "
-        for x in range(0,320) :
-            print(time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime()))
-            self.fourcc = VideoWriter_fourcc(*'MP42')
-            self.frame = np.random.randint(0, 256, (self.height, self.width, 3), dtype=np.uint8)
-            self._image.value = self.frame
-            self._image.init_form()
 
-
-        #glClear(GL_COLOR_BUFFER_BIT)
-        #glDrawArrays(GL_TRIANGLES, 0,  3)
 
 
 
 
 if __name__ == '__main__':
-
     from pyforms import start_app
     start_app(ComputerVisionAlgorithm)

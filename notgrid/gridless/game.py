@@ -1,7 +1,22 @@
+import gym
 import math
 import random
 import numpy as np
-import torch
+
+class NeuralNetwork():
+
+
+    def left(self):
+        print("hej")
+
+    def right(self):
+        print("hej")
+
+    def up(self):
+        print("hej")
+
+    def down(self):
+        print("hej")
 
 def distanceToObject(radius, objPos, line1, line2, visionLength):
 
@@ -219,20 +234,21 @@ class Entity:
         self.internalRandom = random.seed()
         self.speed = 0
         self.index = index
-        if(animal == "Wolf"):
+        if animal == "Wolf":
             self.acceleration = 1
             self.deceleration = 0.5
             self.maxspeed = 2
             self.minspeed = -1
             self.animal = 1
             self.rotationSpeed = 1.0/6
-        elif(animal == "Sheep"):
+        if animal == "Sheep":
             self.acceleration = 1
             self.deceleration = 0.5
             self.maxspeed = 2
             self.minspeed = -1
             self.animal = 2
-            self.rotationSpeed = 1.0/6
+            self.rotationSpeed = 1.0 / 6
+
 
     def move(self):
         rotTemp = self.rot%360
@@ -249,6 +265,8 @@ class Entity:
         self.posY = min(self.posY, topLimit)
 
     def inputChange(self):
+        #a = NeuralNetwork()
+        #a.funca()
         if(self.animal == 1):
             self.speedChange((random.randrange(-10, 10)/10.0))
             self.rotationChange(random.randrange(-3600, 3600)/10.0)
@@ -314,6 +332,10 @@ class Entity:
         tempString += str(round(self.length, 3)) + "," + str(round(self.width, 3))
         return tempString + "O"
 
+
+p1 = Entity("Wolf", 0, 400, 0, 270, 20, 10, 1)
+p2 = Entity("Wolf", 0, 300, 0, 270, 20, 10, 2)
+#p3 = Entity("Sheep", 500, 700, 0, 81, 20, 10, 2)
 animals = []
 
 animals.append(Entity("Sheep", 50, 50, 0, 270, 20, 10, 1))
@@ -324,11 +346,16 @@ animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4))
 saveFile = ""
 
 for y in range(0, 10):
+    for x in range(0, 10000):
+        p1.inputChange()
+        p1.move()
+#        p2.inputChange()
+ #       p2.move()
+        saveFile += "T" + p1.asString() #+ p2.asString()
 
     #TODO reset positions between generations
 
     for x in range(0, 1000):
-
         if(debug):
             print("iteration: " + str(x))
 
@@ -338,16 +365,17 @@ for y in range(0, 10):
             animals[i].inputChange();
             animals[i].move();
             saveFile += animals[i].asString()
-
     saveFile += "\n"
 
 endFile = ""
 
+endFile = p1.objectInf() #+ p2.objectInf() + "B"
 for i in range (len(animals)):
     animals[i].inputChange();
     animals[i].move();
     saveFile += animals[i].asString()
     endFile+= animals[i].objectInf()
+
 
 endFile += "B"
 endFile += saveFile
@@ -355,3 +383,7 @@ endFile += saveFile
 
 with open("Output.txt", "w") as text_file:
     text_file.write(endFile)
+
+
+
+
