@@ -129,6 +129,8 @@ def getWolfVision(wolfIndexPassed):
 
     lines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, currentPosition)
 
+    wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, currentPosition)
+
     wolfVision = []
 
     #TODO multiple sheep?   - like wolves but animals[i].animal == 2
@@ -329,11 +331,9 @@ for i in range (len(animals)):
     animals[i].inputChange();
     animals[i].move();
     saveFile += animals[i].asString()
-
     endFile+= animals[i].objectInf()
 
 endFile += "B"
-
 endFile += saveFile
 
 
