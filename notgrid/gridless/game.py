@@ -1,6 +1,26 @@
 import math
 import random
 import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import torchvision.transforms as T
+from collections import namedtuple
+
+# if gpu is to be used
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+Transition = namedtuple('Transition',
+ ('state', 'action', 'next_state', 'reward'))
+
+class DQN(nn.Module):
+
+    def basic_policy(self):
+        print("action")
+            #take action
+
 
 
 def distanceToObject(radius, objPos, line1, line2, visionLength):
@@ -111,7 +131,7 @@ wolfPosition = (350, 200)
 wolfRotation = -30
 
 #set to 0 for no print 1 for print
-debug = 1
+debug = 0
 
 #limits
 bottomLimit = 0
@@ -258,26 +278,26 @@ class Entity:
 
             vision = getWolfVision(self.index)
 
-            #if(debug):
-            #    print("x: " + str(self.posX))
-            #    print("y: " + str(self.posY))
-            #    print("r: " + str(self.rot))
-#
-#
-            #if(debug):
-            #    for i in range(81):
-            #        value = vision[i]
-            #        if (value != 0):
-            #            input = "unknown"
-            #            if(i < 27):
-            #                input = "sheep: "
-            #            elif(i < 54):
-            #                input = "wolf: "
-            #            else:
-            #                input = "Wall: "
-            #            print(input + str(vision[i]))
-#
-            #    print("_______________________________________________")
+            if(debug):
+                print("x: " + str(self.posX))
+                print("y: " + str(self.posY))
+                print("r: " + str(self.rot))
+
+
+            if(debug):
+                for i in range(81):
+                    value = vision[i]
+                    if (value != 0):
+                        input = "unknown"
+                        if(i < 27):
+                            input = "sheep: "
+                        elif(i < 54):
+                            input = "wolf: "
+                        else:
+                            input = "Wall: "
+                        print(input + str(vision[i]))
+
+                print("_______________________________________________")
 
         elif(self.animal == 2):
             self.speedChange((random.randrange(-10, 10)/10.0))
