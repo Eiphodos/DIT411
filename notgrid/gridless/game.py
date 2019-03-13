@@ -326,7 +326,7 @@ p2 = Entity("Wolf", 0, 300, 0, 270, 20, 10, 2)
 #p3 = Entity("Sheep", 500, 700, 0, 81, 20, 10, 2)
 animals = []
 
-animals.append(Entity("Sheep", 50, 50, 0, 270, 20, 10, 1))
+animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1))
 animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2))
 animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3))
 animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4))
@@ -337,12 +337,11 @@ for y in range(0, 10):
     for x in range(0, 10000):
         p1.inputChange()
         p1.move()
-#        p2.inputChange()
- #       p2.move()
-        saveFile += "T" + p1.asString() #+ p2.asString()
+        p2.inputChange()
+        p2.move()
+        saveFile += "T" + p1.asString() + p2.asString()
 
     #TODO reset positions between generations
-
     for x in range(0, 1000):
         if(debug):
             print("iteration: " + str(x))
@@ -357,7 +356,7 @@ for y in range(0, 10):
 
 endFile = ""
 
-endFile = p1.objectInf() #+ p2.objectInf() + "B"
+endFile = p1.objectInf() + p2.objectInf() + "B"
 for i in range (len(animals)):
     animals[i].inputChange();
     animals[i].move();
