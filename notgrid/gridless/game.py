@@ -97,6 +97,9 @@ def distanceFromWall(visionLine):
 
                 closestDistance = min(closestDistance, distance)
 
+    if(closestDistance == 1000000000 ):
+        return -1;
+
     return closestDistance;
 
 radius = 30
@@ -108,7 +111,7 @@ wolfPosition = (350, 200)
 wolfRotation = -30
 
 #set to 0 for no print 1 for print
-debug = 1
+debug = 0
 
 
 wallLines = [
@@ -240,9 +243,10 @@ class Entity:
 
             vision = getWolfVision(self.index)
 
-            print("x: " + str(self.posX))
-            print("y: " + str(self.posX))
-            print("r: " + str(self.rot))
+            if(debug):
+                print("x: " + str(self.posX))
+                print("y: " + str(self.posY))
+                print("r: " + str(self.rot))
 
 
             if(debug):
