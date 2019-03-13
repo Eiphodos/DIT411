@@ -110,12 +110,6 @@ wolfRotation = -30
 #set to 0 for no print 1 for print
 debug = 1
 
-wolfPositions = []
-wolfPositions.append((350, 275))
-wolfPositions.append((350, 150))
-wolfPositions.append((125, 150))
-wolfPositions.append((125, 382))
-wolfPositions.append((113, 39))
 
 wallLines = [
     [(10, 10), (10, 400)],
@@ -244,11 +238,23 @@ class Entity:
 
             vision = getWolfVision(self.index)
 
+            print("x: " + str(self.posX))
+            print("y: " + str(self.posX))
+            print("r: " + str(self.rot))
+
+
             if(debug):
                 for i in range(81):
                     value = vision[i]
                     if (value != 0):
-                        print(vision[i])
+                        input = "unknown"
+                        if(i < 27):
+                            input = "sheep: "
+                        elif(i < 54):
+                            input = "wolf: "
+                        else:
+                            input = "Wall: "
+                        print(input + str(vision[i]))
 
                 print("_______________________________________________")
 
@@ -292,10 +298,10 @@ class Entity:
 
 animals = []
 
-animals.append(Entity("Sheep", 0, 0, 0, 270, 20, 10, 1))
-animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 2))
-animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 3))
-animals.append(Entity("Wolf", 0, 0, 0, 270, 20, 10, 4))
+animals.append(Entity("Sheep", 50, 50, 0, 270, 20, 10, 1))
+animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2))
+animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3))
+animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4))
 
 saveFile = ""
 
