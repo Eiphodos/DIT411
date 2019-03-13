@@ -1,22 +1,7 @@
-import gym
 import math
 import random
 import numpy as np
 
-class NeuralNetwork():
-
-
-    def left(self):
-        print("hej")
-
-    def right(self):
-        print("hej")
-
-    def up(self):
-        print("hej")
-
-    def down(self):
-        print("hej")
 
 def distanceToObject(radius, objPos, line1, line2, visionLength):
 
@@ -383,7 +368,3 @@ endFile += saveFile
 
 with open("Output.txt", "w") as text_file:
     text_file.write(endFile)
-
-
-
-
