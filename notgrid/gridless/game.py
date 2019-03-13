@@ -258,26 +258,26 @@ class Entity:
 
             vision = getWolfVision(self.index)
 
-            if(debug):
-                print("x: " + str(self.posX))
-                print("y: " + str(self.posY))
-                print("r: " + str(self.rot))
-
-
-            if(debug):
-                for i in range(81):
-                    value = vision[i]
-                    if (value != 0):
-                        input = "unknown"
-                        if(i < 27):
-                            input = "sheep: "
-                        elif(i < 54):
-                            input = "wolf: "
-                        else:
-                            input = "Wall: "
-                        print(input + str(vision[i]))
-
-                print("_______________________________________________")
+            #if(debug):
+            #    print("x: " + str(self.posX))
+            #    print("y: " + str(self.posY))
+            #    print("r: " + str(self.rot))
+#
+#
+            #if(debug):
+            #    for i in range(81):
+            #        value = vision[i]
+            #        if (value != 0):
+            #            input = "unknown"
+            #            if(i < 27):
+            #                input = "sheep: "
+            #            elif(i < 54):
+            #                input = "wolf: "
+            #            else:
+            #                input = "Wall: "
+            #            print(input + str(vision[i]))
+#
+            #    print("_______________________________________________")
 
         elif(self.animal == 2):
             self.speedChange((random.randrange(-10, 10)/10.0))
@@ -318,9 +318,7 @@ class Entity:
         return tempString + "O"
 
 
-p1 = Entity("Wolf", 0, 400, 0, 270, 20, 10, 1)
-p2 = Entity("Wolf", 0, 300, 0, 270, 20, 10, 2)
-#p3 = Entity("Sheep", 500, 700, 0, 81, 20, 10, 2)
+
 animals = []
 
 animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1))
@@ -331,12 +329,6 @@ animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4))
 saveFile = ""
 
 for y in range(0, 10):
-    for x in range(0, 10000):
-        p1.inputChange()
-        p1.move()
-        p2.inputChange()
-        p2.move()
-        saveFile += "T" + p1.asString() + p2.asString()
 
     #TODO reset positions between generations
     for x in range(0, 1000):
@@ -353,12 +345,11 @@ for y in range(0, 10):
 
 endFile = ""
 
-endFile = p1.objectInf() + p2.objectInf() + "B"
 for i in range (len(animals)):
     animals[i].inputChange();
     animals[i].move();
     saveFile += animals[i].asString()
-    endFile+= animals[i].objectInf()
+    endFile += animals[i].objectInf()
 
 
 endFile += "B"
