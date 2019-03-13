@@ -111,7 +111,7 @@ wolfPosition = (350, 200)
 wolfRotation = -30
 
 #set to 0 for no print 1 for print
-debug = 1
+debug = 0
 
 #limits
 bottomLimit = 0
@@ -258,26 +258,26 @@ class Entity:
 
             vision = getWolfVision(self.index)
 
-            #if(debug):
-            #    print("x: " + str(self.posX))
-            #    print("y: " + str(self.posY))
-            #    print("r: " + str(self.rot))
-#
-#
-            #if(debug):
-            #    for i in range(81):
-            #        value = vision[i]
-            #        if (value != 0):
-            #            input = "unknown"
-            #            if(i < 27):
-            #                input = "sheep: "
-            #            elif(i < 54):
-            #                input = "wolf: "
-            #            else:
-            #                input = "Wall: "
-            #            print(input + str(vision[i]))
-#
-            #    print("_______________________________________________")
+            if(debug):
+                print("x: " + str(self.posX))
+                print("y: " + str(self.posY))
+                print("r: " + str(self.rot))
+
+
+            if(debug):
+                for i in range(81):
+                    value = vision[i]
+                    if (value != 0):
+                        input = "unknown"
+                        if(i < 27):
+                            input = "sheep: "
+                        elif(i < 54):
+                            input = "wolf: "
+                        else:
+                            input = "Wall: "
+                        print(input + str(vision[i]))
+
+                print("_______________________________________________")
 
         elif(self.animal == 2):
             self.speedChange((random.randrange(-10, 10)/10.0))
