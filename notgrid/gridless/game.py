@@ -25,212 +25,217 @@ class DQN(nn.Module):
 
 
 
-def distanceToObject(radius, objPos, line1, line2, visionLength):
 
-    distToline1 = math.sqrt( (line1[0] - objPos[0])**2 + (line1[1] - objPos[1])**2 )
-    distToline2 = math.sqrt( (line2[0] - objPos[0])**2 + (line2[1] - objPos[1])**2 )
+class Entity:
+    radius = 30
+    sheepPosition = [240.0, 175.0]
+    visionLength = 100
+    fieldOfVision = 270
+    nVisionLines = 27
+    wolfPosition = (350, 200)
+    wolfRotation = -30
 
-    if(distToline1 > visionLength + radius or distToline2 > visionLength + radius):
-        return -1;
+    #set to 0 for no print 1 for print
+    debug = 0
 
-    x = np.array(objPos)
-    u = np.array(line1)
-    v = np.array(line2)
+    #limits
+    bottomLimit = 0
+    topLimit = 1000
+    leftLimit = 0
+    rightLimit = 1000
 
-    n = v - u
 
-    #n /= np.linalg.norm(n, 2)
-    n /= visionLength
 
-    intersectPos = u + n*np.dot(x - u, n)
 
-    distanceLineToObject = math.sqrt( (intersectPos[0] - objPos[0])**2 + (intersectPos[1] - objPos[1])**2 )
+    wallLines = [
+        [(leftLimit, bottomLimit), (leftLimit, topLimit)],
+        [(rightLimit, bottomLimit), (rightLimit, topLimit)],
+        [(leftLimit, bottomLimit), (rightLimit, bottomLimit)],
+        [(leftLimit, topLimit), (rightLimit, topLimit)]
+    ]
 
-    if(distanceLineToObject <= radius):
-        orginToIntersectDistance = math.sqrt( (line1[0] - intersectPos[0])**2 + (line1[1] - intersectPos[1])**2 )
 
-        if(orginToIntersectDistance < visionLength and distToline1 <= visionLength + radius and distToline2 <= visionLength + radius):
-            return (orginToIntersectDistance)
-        elif(distToline1 <= radius or distToline2 <= radius):
-            return (orginToIntersectDistance)
-        else:
-            return (-1.0)
+    def distanceToObject(radius, objPos, line1, line2, visionLength):
 
-    else:
-        return -1;
+        distToline1 = math.sqrt( (line1[0] - objPos[0])**2 + (line1[1] - objPos[1])**2 )
+        distToline2 = math.sqrt( (line2[0] - objPos[0])**2 + (line2[1] - objPos[1])**2 )
 
-def createLines(nLines, lineLength, fieldOfView, startAngle, orgin):
-    startX = orgin[0]
-    startY = orgin[1]
-
-    degreesPerLine = fieldOfView / (nLines-1)
-
-    linesStartAtAngle = startAngle - fieldOfView/2;
-
-    lines = [0 for x in range(nLines)]
-
-    for lineIndex in range(nLines):
-
-        angle = linesStartAtAngle + lineIndex * degreesPerLine;
-
-        stopX = startX + math.sin( math.radians(angle) ) * lineLength
-        stopY = startY + math.cos( math.radians(angle) ) * lineLength
-
-        lines[lineIndex] = [(startX, startY),(stopX, stopY)]
-
-    return lines
-
-def line_intersection(line1, line2):
-    xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
-    ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
-
-    def det(a, b):
-        return a[0] * b[1] - a[1] * b[0]
-
-    div = det(xdiff, ydiff)
-    if div == 0:
-       return "none"
-
-    d = (det(*line1), det(*line2))
-    x = det(d, xdiff) / div
-    y = det(d, ydiff) / div
-
-    return x, y
-
-def distanceFromWall(visionLine):
-    closestDistance = 1000000000;
-
-    for lineIndex in range(len(wallLines)):
-        intersection = line_intersection( (wallLines[lineIndex][0], wallLines[lineIndex][1]), (visionLine[0], visionLine[1]))
-
-        if (intersection == "none"):
+        if(distToline1 > visionLength + radius or distToline2 > visionLength + radius):
             return -1;
+
+        x = np.array(objPos)
+        u = np.array(line1)
+        v = np.array(line2)
+
+        n = v - u
+
+        #n /= np.linalg.norm(n, 2)
+        n /= visionLength
+
+        intersectPos = u + n*np.dot(x - u, n)
+
+        distanceLineToObject = math.sqrt( (intersectPos[0] - objPos[0])**2 + (intersectPos[1] - objPos[1])**2 )
+
+        if(distanceLineToObject <= radius):
+            orginToIntersectDistance = math.sqrt( (line1[0] - intersectPos[0])**2 + (line1[1] - intersectPos[1])**2 )
+
+            if(orginToIntersectDistance < visionLength and distToline1 <= visionLength + radius and distToline2 <= visionLength + radius):
+                return (orginToIntersectDistance)
+            elif(distToline1 <= radius or distToline2 <= radius):
+                return (orginToIntersectDistance)
+            else:
+                return (-1.0)
+
         else:
-            xDeltaEnd = visionLine[1][0] - intersection[0]
-            yDeltaEnd = visionLine[1][1] - intersection[1]
+            return -1;
 
-            distanceEnd = math.sqrt( xDeltaEnd**2 + yDeltaEnd**2 )
+    def createLines(nLines, lineLength, fieldOfView, startAngle, orgin):
+        startX = orgin[0]
+        startY = orgin[1]
 
-            if(distanceEnd <= visionLength):
-                xDelta = visionLine[0][0] - intersection[0]
-                yDelta = visionLine[0][1] - intersection[1]
+        degreesPerLine = fieldOfView / (nLines-1)
 
-                distance = math.sqrt( xDelta**2 + yDelta**2 )
+        linesStartAtAngle = startAngle - fieldOfView/2;
 
-                closestDistance = min(closestDistance, distance)
+        lines = [0 for x in range(nLines)]
 
-    if(closestDistance == 1000000000 ):
-        return -1;
+        for lineIndex in range(nLines):
 
-    return closestDistance;
+            angle = linesStartAtAngle + lineIndex * degreesPerLine;
 
-radius = 30
-sheepPosition = [240.0, 175.0]
-visionLength = 100
-fieldOfVision = 270
-nVisionLines = 27
-wolfPosition = (350, 200)
-wolfRotation = -30
+            stopX = startX + math.sin( math.radians(angle) ) * lineLength
+            stopY = startY + math.cos( math.radians(angle) ) * lineLength
 
-#set to 0 for no print 1 for print
-debug = 0
+            lines[lineIndex] = [(startX, startY),(stopX, stopY)]
 
-#limits
-bottomLimit = 0
-topLimit = 1000
-leftLimit = 0
-rightLimit = 1000
+        return lines
+
+    def line_intersection(line1, line2):
+        xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+        ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
+
+        def det(a, b):
+            return a[0] * b[1] - a[1] * b[0]
+
+        div = det(xdiff, ydiff)
+        if div == 0:
+           return "none"
+
+        d = (det(*line1), det(*line2))
+        x = det(d, xdiff) / div
+        y = det(d, ydiff) / div
+
+        return x, y
+
+    def distanceFromWall(visionLine):
+        closestDistance = 1000000000;
+
+        for lineIndex in range(len(wallLines)):
+            intersection = line_intersection( (wallLines[lineIndex][0], wallLines[lineIndex][1]), (visionLine[0], visionLine[1]))
+
+            if (intersection == "none"):
+                return -1;
+            else:
+                xDeltaEnd = visionLine[1][0] - intersection[0]
+                yDeltaEnd = visionLine[1][1] - intersection[1]
+
+                distanceEnd = math.sqrt( xDeltaEnd**2 + yDeltaEnd**2 )
+
+                if(distanceEnd <= visionLength):
+                    xDelta = visionLine[0][0] - intersection[0]
+                    yDelta = visionLine[0][1] - intersection[1]
+
+                    distance = math.sqrt( xDelta**2 + yDelta**2 )
+
+                    closestDistance = min(closestDistance, distance)
+
+        if(closestDistance == 1000000000 ):
+            return -1;
+
+        return closestDistance;
 
 
-wallLines = [
-    [(leftLimit, bottomLimit), (leftLimit, topLimit)],
-    [(rightLimit, bottomLimit), (rightLimit, topLimit)],
-    [(leftLimit, bottomLimit), (rightLimit, bottomLimit)],
-    [(leftLimit, topLimit), (rightLimit, topLimit)]
-]
+    def getWolfVision(wolfIndexPassed):
 
-lines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
-wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
+        wolf = animals[wolfIndexPassed - 1];
+        currentPosition = (wolf.posX, wolf.posY)
 
+        lines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, currentPosition)
 
-def getWolfVision(wolfIndexPassed):
+        wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, currentPosition)
 
-    wolf = animals[wolfIndexPassed - 1];
-    currentPosition = (wolf.posX, wolf.posY)
+        wolfVision = []
 
-    lines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, currentPosition)
+        #TODO multiple sheep?   - like wolves but animals[i].animal == 2
 
-    wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolf.rot, currentPosition)
+        #lines towards sheep
+        for lineIndex in range(nVisionLines):
+            dist = distanceToObject(radius, sheepPosition, lines[lineIndex][0], lines[lineIndex][1], visionLength);
 
-    wolfVision = []
-
-    #TODO multiple sheep?   - like wolves but animals[i].animal == 2
-
-    #lines towards sheep
-    for lineIndex in range(nVisionLines):
-        dist = distanceToObject(radius, sheepPosition, lines[lineIndex][0], lines[lineIndex][1], visionLength);
-
-        partOFMaxDistance = dist/float(visionLength + radius);
-        partOFMaxDistance = max(0, partOFMaxDistance)
-        partOFMaxDistance = min(1, partOFMaxDistance)
-
-        if(partOFMaxDistance > 0):
-            partOFMaxDistance = 1 - partOFMaxDistance;
-
-        wolfVision.append(partOFMaxDistance)
-
-    #lines towards wolf
-    for lineIndex in range(nVisionLines):
-
-        maxPartOfMaxDistance = 0;
-
-        for wolfIndex in range(len(animals)):
-
-            #not self and is wolf
-            if( wolfIndex != wolfIndexPassed and animals[wolfIndex].animal == 1):
-
-                wolfPosition = (animals[wolfIndex].posX, animals[wolfIndex].posY)
-
-                xDelta = currentPosition[0]-wolfPosition[0]
-                yDelta = currentPosition[1]-wolfPosition[1]
-
-                distance = math.sqrt(xDelta**2 + yDelta**2)
-                if (distance < visionLength + radius):
-                    dist = distanceToObject(radius, wolfPosition, lines[lineIndex][0], lines[lineIndex][1], visionLength);
-
-                    partOFMaxDistance = dist/float(visionLength + radius);
-                    partOFMaxDistance = max(0, partOFMaxDistance)
-                    partOFMaxDistance = min(1, partOFMaxDistance)
-
-                    if(partOFMaxDistance > 0):
-                        partOFMaxDistance = 1 - partOFMaxDistance;
-
-                    maxPartOfMaxDistance = max(maxPartOfMaxDistance, partOFMaxDistance)
-
-        wolfVision.append(maxPartOfMaxDistance)
-
-    #lines towards walls
-    for lineIndex in range(nVisionLines):
-        dist = distanceFromWall(wallVisionLines[lineIndex]);
-
-        if(dist < 0 or dist > visionLength):
-            wolfVision.append(0)
-        else:
-            #hit and is < visionlength from orgin
-
-            partOFMaxDistance = dist/float(visionLength);
-            partOFMaxDistance = min(1, partOFMaxDistance)
+            partOFMaxDistance = dist/float(visionLength + radius);
             partOFMaxDistance = max(0, partOFMaxDistance)
+            partOFMaxDistance = min(1, partOFMaxDistance)
 
             if(partOFMaxDistance > 0):
                 partOFMaxDistance = 1 - partOFMaxDistance;
 
             wolfVision.append(partOFMaxDistance)
 
-    return wolfVision;
+        #lines towards wolf
+        for lineIndex in range(nVisionLines):
+
+            maxPartOfMaxDistance = 0;
+
+            for wolfIndex in range(len(animals)):
+
+                #not self and is wolf
+                if( wolfIndex != wolfIndexPassed and animals[wolfIndex].animal == 1):
+
+                    wolfPosition = (animals[wolfIndex].posX, animals[wolfIndex].posY)
+
+                    xDelta = currentPosition[0]-wolfPosition[0]
+                    yDelta = currentPosition[1]-wolfPosition[1]
+
+                    distance = math.sqrt(xDelta**2 + yDelta**2)
+                    if (distance < visionLength + radius):
+                        dist = distanceToObject(radius, wolfPosition, lines[lineIndex][0], lines[lineIndex][1], visionLength);
+
+                        partOFMaxDistance = dist/float(visionLength + radius);
+                        partOFMaxDistance = max(0, partOFMaxDistance)
+                        partOFMaxDistance = min(1, partOFMaxDistance)
+
+                        if(partOFMaxDistance > 0):
+                            partOFMaxDistance = 1 - partOFMaxDistance;
+
+                        maxPartOfMaxDistance = max(maxPartOfMaxDistance, partOFMaxDistance)
+
+            wolfVision.append(maxPartOfMaxDistance)
+
+        #lines towards walls
+        for lineIndex in range(nVisionLines):
+            dist = distanceFromWall(wallVisionLines[lineIndex]);
+
+            if(dist < 0 or dist > visionLength):
+                wolfVision.append(0)
+            else:
+                #hit and is < visionlength from orgin
+
+                partOFMaxDistance = dist/float(visionLength);
+                partOFMaxDistance = min(1, partOFMaxDistance)
+                partOFMaxDistance = max(0, partOFMaxDistance)
+
+                if(partOFMaxDistance > 0):
+                    partOFMaxDistance = 1 - partOFMaxDistance;
+
+                wolfVision.append(partOFMaxDistance)
+
+        return wolfVision;
+
+    lines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
+    wallVisionLines = createLines(nVisionLines, visionLength, fieldOfVision, wolfRotation, wolfPosition)
 
 
-class Entity:
+
     def __init__(self, animal, posX, posY, rot, numberOfDSight, length, width, index):
         self.posX = posX
         self.posY = posY
@@ -257,6 +262,10 @@ class Entity:
             self.minspeed = -1
             self.animal = 2
             self.rotationSpeed = 1.0 / 6
+
+
+
+
 
 
     def move(self):
@@ -398,7 +407,3 @@ class Game:
 
         with open("Output.txt", "w") as text_file:
             text_file.write(endFile)
-
-
-
-
