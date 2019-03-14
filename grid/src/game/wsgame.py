@@ -36,15 +36,21 @@ class State:
         self.wolf_speed = wspeed
         self.sheep_speed = sspeed
 
+        # Reward a wolf gets for moving
+        self.reward_move = 1
+        # Reward every wolf gets when a wolf catches a sheep
+        self.reward_sheep = 100
+        # Punishment for when a wolf tries to go out of bounds
+        self.reward_oob = 0
+        # Punishment for when a wolf tries to enter an already occupied position
+        self.reward_ao = 0
+        # Reward a wolf gets for doing nothing
+        self.reward_nothing = 0
+
 
     def move_wolf(self, wolf, dir):
-        reward = 0
-        # Reward (punishment) for going out of bounds
-        reward_oob = -0.1
-        # Reward (punishment) for trying to enter an already occupied position
-        reward_ao = -0.01
-        # Reward for catching the sheep
-        reward_catch = 1
+        # Set default reward
+        reward = self.reward_move
 
         if wolf == 0:
             current_pos = self.wolf_1_pos
@@ -54,59 +60,51 @@ class State:
             current_pos = self.wolf_3_pos
 
         
-        # If action is do nothing, just return
+        # If action is do nothing, just return with no reward
         if dir == 0:
-            return reward
+            return 0
         # Action - move west
         if dir == 1:
             # Check for out of bounds
             if current_pos[1] - self.wolf_speed < 0:
-                reward = reward_oob
-                return reward
+                return self.reward_oob
             # Check if another wolf is already there
             if self.grid[current_pos[0],current_pos[1] - self.wolf_speed] in (1, 2, 3):
-                reward = reward_ao
-                return reward
+                return self.reward_ao
             new_pos = (current_pos[0], current_pos[1] - self.wolf_speed)
             if new_pos == self.sheep_pos:
-                reward = reward_catch
+                reward = self.reward_sheep
 
         # Action - move south
         if dir == 2:
             if current_pos[0] + self.wolf_speed >= self.grid_size:
-                reward = reward_oob
-                return reward
+                return self.reward_oob
             if self.grid[current_pos[0] + self.wolf_speed,current_pos[1]] in (1, 2, 3):
-                reward = reward_ao
-                return reward
+                return self.reward_ao
             new_pos = (current_pos[0] + self.wolf_speed, current_pos[1])
             if new_pos == self.sheep_pos:
-                reward = reward_catch
+                reward = self.reward_sheep
 
         # Action - move east
         if dir == 3:
             if current_pos[1] + self.wolf_speed >= self.grid_size:
-                reward = reward_oob
-                return reward
+                return self.reward_oob
             if self.grid[current_pos[0],current_pos[1] + self.wolf_speed] in (1, 2, 3):
-                reward = reward_ao
-                return reward
+                return self.reward_ao
             new_pos = (current_pos[0], current_pos[1] + self.wolf_speed)
             if new_pos == self.sheep_pos:
-                reward = reward_catch
+                reward = self.reward_sheep
 
 
         # Action - move north
         if dir == 4:
             if current_pos[0] - self.wolf_speed < 0:
-                reward = reward_oob
-                return reward
+                return self.reward_oob
             if self.grid[current_pos[0] - self.wolf_speed,current_pos[1]] in (1, 2, 3):
-                reward = reward_ao
-                return reward
+                return self.reward_ao
             new_pos = (current_pos[0] - self.wolf_speed, current_pos[1])
             if new_pos == self.sheep_pos:
-                reward = reward_catch
+                reward = self.reward_sheep
 
         # Update positions
         #Set the old position as free
@@ -281,12 +279,11 @@ class State:
                 reward3 = self.move_wolf(2, dir)
             counter += 1
             dir = counter % 5
-        print(self.grid)
-        if (reward1 == 1 or reward2 == 1 or reward3 == 1 ):
-            #Sheep was caught so set reward to 1 for all wolves and reset game state
-            reward1 = 1
-            reward2 = 1
-            reward3 = 1
+        if (reward1 == self.reward_sheep or reward2 == self.reward_sheep or reward3 == self.reward_sheep ):
+            #Sheep was caught so set reward for all wolves and reset game state
+            reward1 = self.reward_sheep
+            reward2 = self.reward_sheep
+            reward3 = self.reward_sheep
             self.__init__(self.grid_size, self.wolf_speed, self.sheep_speed)
             return self.grid, reward1, reward2, reward3, True
         else:
