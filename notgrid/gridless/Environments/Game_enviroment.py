@@ -1,10 +1,10 @@
 import gym
 import numpy as np
-import game as g
+import notgrid.gridless.game as g
 from pyvirtualdisplay import Display
 import matplotlib.pyplot as plt
 
-from Environments.Base_Environment import Base_Environment
+from notgrid.gridless.Environments.Base_Environment import Base_Environment
 
 class Game_enviroment(Base_Environment):
 
