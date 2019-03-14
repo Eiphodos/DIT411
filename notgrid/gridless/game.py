@@ -67,41 +67,11 @@ class Entity:
         self.posY = max(self.posY, self.game.bottomLimit)
         self.posY = min(self.posY, self.game.topLimit)
 
-    def inputChange(self):
+    def inputChange(self, action1, action2):
         # a = NeuralNetwork()
         # a.funca()
-        if (self.animal == 1):
-            self.speedChange((random.randrange(-10, 10) / 10.0))
-            self.rotationChange(random.randrange(-3600, 3600) / 10.0)
-
-            vision = self.game.getWolfVision(self.index)
-
-            if (self.game.debug):
-                print("x: " + str(self.posX))
-                print("y: " + str(self.posY))
-                print("r: " + str(self.rot))
-
-            if (self.game.debug):
-                for i in range(81):
-                    value = vision[i]
-                    if (value != 0):
-                        input = "unknown"
-                        if (i < 27):
-                            input = "sheep: "
-                        elif (i < 54):
-                            input = "wolf: "
-                        else:
-                            input = "Wall: "
-                        print(input + str(vision[i]))
-
-                print("_______________________________________________")
-
-        elif (self.animal == 2):
-            self.speedChange((random.randrange(-10, 10) / 10.0))
-            self.rotationChange(random.randrange(-3600, 3600) / 10.0)
-
-            self.game.sheepPosition[0] = self.posX
-            self.game.sheepPosition[1] = self.posY
+        self.speedChange(action1)
+        self.rotationChange(action2)
 
     def speedChange(self, speedChange):
         if (self.speed + speedChange < 0):
@@ -129,8 +99,9 @@ class Entity:
 
     def getCurrentState(self):
         cState = self.game.getWolfVision(self.index)
-        cState.append(self.speed / self.maxspeed)
-        cState.append((self.rot % 360) / 360)
+        tempstates = [(self.speed / self.maxspeed), ((self.rot % 360) / 360)]
+        cState += tempstates
+        return cState
 
     def getNextState(self):
         if (nextReady == 1):
@@ -199,23 +170,54 @@ class Game:
         self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3, self))
         self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
         self.saveFile += "\n"
+        return self.getCurrentState()
 
-    def nextState(self):
+    def getNextState(self):
         self.index = self.index + 1
         self.saveFile += "T"
         for i in range(len(self.animals)):
-            self.animals[i].inputChange();
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
+
+    def getCurrentState(self):
+        states = []
+        for i in range(len(self.animals)):
+            states += (self.animals[i].getCurrentState())
+        return states
+
+    def getAction(self, action):
+        #for i in range(len(self.animals)):
+         #   self.animals[i].inputChange(action[i * 2], action[i * 2 + 1])
+        self.getNextState()
+        done = False
+        if (self.index > 999):
+            done = True
+        return self.getCurrentState(), self.getReward(), done, 1
+
+
+    def getReward(self):
+        reward = 0
+        distance = 1000
+        for i in range(len(self.animals)):
+            if(self.animals[i].animal == 1):
+                distance = math.sqrt((self.sheepPosition[0] - self.animals[i].posX)*(self.sheepPosition[0] - self.animals[i].posX)
+                          +(self.sheepPosition[1] - self.animals[i].posY)*(self.sheepPosition[1] - self.animals[i].posY))
+            if(1000-(distance*distance) > reward)  :
+                reward = 1000-(distance*distance)
+
+        return reward
+
+
+
 
     def done(self):
         endFile = ""
 
-        for i in range(len(self.animals)):
-            self.animals[i].inputChange();
-            self.animals[i].move();
-            self.saveFile += self.animals[i].asString()
-            endFile += self.animals[i].objectInf()
+       # for i in range(len(self.animals)):
+        #    self.animals[i].inputChange();
+        #    self.animals[i].move();
+        #    self.saveFile += self.animals[i].asString()
+        #    endFile += self.animals[i].objectInf()
 
         endFile += "B"
         endFile += self.saveFile
@@ -403,11 +405,3 @@ class Game:
 
         return closestDistance;
 
-
-game = Game()
-for y in range(0, 10):
-    for x in range(0, 1000):
-        game.nextState()
-    game.gameReset()
-
-game.done()

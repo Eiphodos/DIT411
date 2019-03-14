@@ -1,4 +1,4 @@
-from notgrid.gridless.Utilities.Utility_Functions import abstract
+from Utilities.Utility_Functions import abstract
 
 @abstract
 class HER_Base(object):

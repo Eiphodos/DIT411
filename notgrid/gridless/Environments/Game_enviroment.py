@@ -3,15 +3,14 @@ import numpy as np
 import notgrid.gridless.game as g
 from pyvirtualdisplay import Display
 import matplotlib.pyplot as plt
-
 from notgrid.gridless.Environments.Base_Environment import Base_Environment
 
 class Game_enviroment(Base_Environment):
 
     def __init__(self, entity):
-        self.game_environment = gym.make("CartPole-v0")
+        self.game_environment = g.Game()
         self.entity = entity;
-        self.state = entity.getCurrentState()
+        self.state = np.asarray(self.game_environment.gameReset(), dtype=np.float64)
         self.next_state = None
         self.reward = None
         self.done = False
@@ -20,28 +19,30 @@ class Game_enviroment(Base_Environment):
     def conduct_action(self, action):
         if type(action) is np.ndarray:
             action = action[0]
-        self.next_state, self.reward, self.done, _ = self.game_environment.step(action)
+        self.next_state, self.reward, self.done, _ = self.game_environment.getAction(action)
 
     def get_action_size(self):
-        return 2
+        return 6
 
     def get_state_size(self):
-        return len(self.entity.getCurrentState())
+        return len(self.game_environment.getCurrentState())
 
     def get_state(self):
-        return self.entity.getCurrentState()
+        print(self.game_environment.getCurrentState())
+        npa = np.asarray(self.game_environment.getCurrentState(), dtype=np.float64)
+        return npa
 
     def get_next_state(self):
-        return self.entity.getNextState()
+        return self.game_environment.getNextState()
 
     def get_reward(self):
-        return self.entity.getReward()
+        return self.game_environment.getReward()
 
     def get_done(self):
-        return self.entity.done()
+        return self.game_environment.done()
 
     def reset_environment(self):
-        self.state = self.game_environment.reset()
+        self.state =  np.asarray(self.game_environment.gameReset(), dtype=np.float64)
 
     def visualise_agent(self, agent):
 
@@ -50,7 +51,7 @@ class Game_enviroment(Base_Environment):
         display = Display(visible=0, size=(1400, 900))
         display.start()
 
-        state = env.reset()
+        state = env.gameReset()
         img = plt.imshow(env.render(mode='rgb_array'))
         for t in range(1000):
             agent.step()
@@ -73,4 +74,3 @@ class Game_enviroment(Base_Environment):
 
     def get_rolling_period_to_calculate_score_over(self):
         return 10
-

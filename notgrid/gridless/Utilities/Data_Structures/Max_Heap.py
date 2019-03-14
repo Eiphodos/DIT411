@@ -1,5 +1,5 @@
 import numpy as np
-from Utilities.Data_Structures.Node import Node
+from notgrid.gridless.Utilities.Data_Structures.Node import Node
 
 
 class Max_Heap(object):

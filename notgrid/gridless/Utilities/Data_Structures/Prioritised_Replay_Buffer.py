@@ -1,7 +1,7 @@
 import numpy as np
 import torch
-from Utilities.Data_Structures.Deque import Deque
-from Utilities.Data_Structures.Max_Heap import Max_Heap
+from notgrid.gridless.Utilities.Data_Structures.Deque import Deque
+from notgrid.gridless.Utilities.Data_Structures.Max_Heap import Max_Heap
 
 
 class Prioritised_Replay_Buffer(Max_Heap, Deque):
