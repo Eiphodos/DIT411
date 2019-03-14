@@ -9,6 +9,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/gridless$game.coverage" NAME="game Coverage Results" MODIFIED="1552587901412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/untitled1$Results__1_.coverage" NAME="Results (1) Coverage Results" MODIFIED="1552518083460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Lunar_Lander_Continuous" />
     <SUITE FILE_PATH="coverage/untitled1$Results.coverage" NAME="Results Coverage Results" MODIFIED="1552516662386" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Cart_Pole" />
     <SUITE FILE_PATH="coverage/tese$Results.coverage" NAME="Results Coverage Results" MODIFIED="1552578694533" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Cart_Pole" />
@@ -18,8 +19,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Environments/Base_Environment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+            <state relative-caret-position="765">
+              <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -27,7 +28,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Environments/Game_enviroment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
+            <state relative-caret-position="731">
               <caret line="43" column="36" selection-start-line="43" selection-start-column="36" selection-end-line="43" selection-end-column="36" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -39,10 +40,26 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2657">
-              <caret line="191" column="32" selection-start-line="191" selection-start-column="32" selection-end-line="191" selection-end-column="32" />
+            <state relative-caret-position="404">
+              <caret line="410" selection-start-line="410" selection-end-line="410" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#628#1409#0" />
+                <element signature="e#1440#1867#0" />
+                <element signature="e#1904#3156#0" />
+                <element signature="e#3206#3657#0" />
+                <element signature="e#3713#3757#0" />
+                <element signature="e#3791#4150#0" />
+                <element signature="e#4191#4325#0" />
+                <element signature="e#4363#4424#0" />
+                <element signature="e#4459#4482#0" />
+                <element signature="e#4511#4532#0" />
+                <element signature="e#4567#4786#0" />
+                <element signature="e#7175#10246#0" />
+                <element signature="e#10333#11532#0" />
+                <element signature="e#11621#12163#0" />
+                <element signature="e#12220#12627#0" />
+                <element signature="e#12681#13664#0" />
               </folding>
             </state>
           </provider>
@@ -56,8 +73,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Results/Cart_Pole/Results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="469">
-              <caret line="51" column="40" lean-forward="true" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
+            <state relative-caret-position="867">
+              <caret line="51" column="40" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
               <folding>
                 <element signature="e#0#61#0" expanded="true" />
               </folding>
@@ -73,7 +90,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Utilities/Utility_Functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
+            <state relative-caret-position="935">
               <caret line="65" selection-start-line="65" selection-end-line="65" />
             </state>
           </provider>
@@ -82,7 +99,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DDQN_With_Prioritised_Experience_Replay.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-204">
+            <state>
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -93,7 +110,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Agents/Base_Agent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1508">
+            <state relative-caret-position="1972">
               <caret line="122" column="27" selection-start-line="122" selection-start-column="27" selection-end-line="122" selection-end-column="27" />
             </state>
           </provider>
@@ -103,7 +120,7 @@
         <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="340">
-              <caret line="27" column="25" lean-forward="true" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
+              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -116,6 +133,9 @@
         <option value="Python Script" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -135,6 +155,7 @@
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -144,45 +165,33 @@
         <subPane>
           <expand>
             <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
+              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gridless" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
+              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gridless" type="462c0819:PsiDirectoryNode" />
               <item name="Agents" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
-              <item name="Agents" type="462c0819:PsiDirectoryNode" />
-              <item name="DQN_Agents" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
+              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gridless" type="462c0819:PsiDirectoryNode" />
               <item name="Environments" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
-              <item name="Environments" type="462c0819:PsiDirectoryNode" />
-              <item name="Open_AI_Gym_Environments" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
+              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gridless" type="462c0819:PsiDirectoryNode" />
               <item name="Results" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
+              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gridless" type="462c0819:PsiDirectoryNode" />
               <item name="Results" type="462c0819:PsiDirectoryNode" />
               <item name="Cart_Pole" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="tese" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tese" type="462c0819:PsiDirectoryNode" />
+              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gridless" type="462c0819:PsiDirectoryNode" />
               <item name="Utilities" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -219,7 +228,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Results">
+  <component name="RunManager" selected="Python.game">
     <configuration name="Results (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="untitled1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -264,8 +273,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="game" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="untitled1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/game.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.game" />
         <item itemvalue="Python.Results" />
         <item itemvalue="Python.Results (1)" />
       </list>
@@ -283,23 +315,23 @@
       <updated>1552515445991</updated>
       <workItem from="1552515447220" duration="3024000" />
       <workItem from="1552575892811" duration="2697000" />
+      <workItem from="1552579496839" duration="680000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5721000" />
+    <option name="totallyTimeSpent" value="6401000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2553305" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32936078" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32936078" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -327,13 +359,21 @@
           <line>22</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/game.py</url>
+          <line>222</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/game.py</url>
+          <line>406</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.travis.yml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml" />
     <entry file="file://$PROJECT_DIR$/Results/Fetch_Reach/Results.py" />
     <entry file="file://C:/Program Files (x86)/Microsoft Visual Studio/Shared/Python36_64/Lib/multiprocessing/connection.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -417,12 +457,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Environments/Base_Environment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Environments/Game_enviroment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="43" column="36" selection-start-line="43" selection-start-column="36" selection-end-line="43" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DDQN_Agent.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/Results/Cart_Pole/Results.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="867">
+          <caret line="51" column="40" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utilities/Models/Linear_Model.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utilities/Utility_Functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="935">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DDQN_With_Prioritised_Experience_Replay.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-204">
+        <state>
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
@@ -431,61 +508,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Agents/Base_Agent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1508">
+        <state relative-caret-position="1972">
           <caret line="122" column="27" selection-start-line="122" selection-start-column="27" selection-end-line="122" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Utilities/Models/Linear_Model.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Environments/Base_Environment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="45" column="23" lean-forward="true" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Environments/Game_enviroment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="43" column="36" selection-start-line="43" selection-start-column="36" selection-end-line="43" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
-          <caret line="27" column="25" lean-forward="true" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Results/Cart_Pole/Results.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="51" column="40" lean-forward="true" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Utilities/Utility_Functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
+          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2657">
-          <caret line="191" column="32" selection-start-line="191" selection-start-column="32" selection-end-line="191" selection-end-column="32" />
+        <state relative-caret-position="404">
+          <caret line="410" selection-start-line="410" selection-end-line="410" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#628#1409#0" />
+            <element signature="e#1440#1867#0" />
+            <element signature="e#1904#3156#0" />
+            <element signature="e#3206#3657#0" />
+            <element signature="e#3713#3757#0" />
+            <element signature="e#3791#4150#0" />
+            <element signature="e#4191#4325#0" />
+            <element signature="e#4363#4424#0" />
+            <element signature="e#4459#4482#0" />
+            <element signature="e#4511#4532#0" />
+            <element signature="e#4567#4786#0" />
+            <element signature="e#7175#10246#0" />
+            <element signature="e#10333#11532#0" />
+            <element signature="e#11621#12163#0" />
+            <element signature="e#12220#12627#0" />
+            <element signature="e#12681#13664#0" />
           </folding>
         </state>
       </provider>
