@@ -1,16 +1,12 @@
-from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
-from Utilities.Data_Structures.Config import Config
-from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
-from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
-from Agents.DQN_Agents.DQN_Agent import DQN_Agent
-from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
-from Environments.Game_enviroment import Game_enviroment
-from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
-from Agents.Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
-from Agents.Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
-from Agents.Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
-from Utilities.Utility_Functions import run_games_for_agents
+from notgrid.gridless.Utilities.Data_Structures.Config import Config
+from notgrid.gridless.Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
+from notgrid.gridless.Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
+from notgrid.gridless.Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from notgrid.gridless.Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
+from notgrid.gridless.Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
+from notgrid.gridless.Environments.Game_enviroment import Game_enviroment
+from notgrid.gridless.Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
+from notgrid.gridless.Utilities.Utility_Functions import run_games_for_agents
 
 config = Config()
 config.seed = 1
@@ -47,8 +43,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent, \
-              Genetic_Agent, Hill_Climbing_Agent]
+    AGENTS = [DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
     #AGENTS = [PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent,\
              #Genetic_Agent, Hill_Climbing_Agent]
     run_games_for_agents(config, AGENTS)

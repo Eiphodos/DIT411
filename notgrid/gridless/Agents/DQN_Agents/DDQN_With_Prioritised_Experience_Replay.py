@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
-from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
-from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
+from notgrid.gridless.Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
+from notgrid.gridless.Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 
 
 class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):

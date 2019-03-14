@@ -1,5 +1,5 @@
-from Utilities.Models.Neural_Network import Neural_Network
-from Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from notgrid.gridless.Utilities.Models.Neural_Network import Neural_Network
+from notgrid.gridless.Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 
 class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):

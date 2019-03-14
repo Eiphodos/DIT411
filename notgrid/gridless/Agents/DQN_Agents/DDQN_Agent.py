@@ -1,4 +1,4 @@
-from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
+from notgrid.gridless.Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 
 class DDQN_Agent(DQN_Agent_With_Fixed_Q_Targets):
     agent_name = "DDQN"
