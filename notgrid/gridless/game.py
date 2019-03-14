@@ -11,6 +11,8 @@ from collections import namedtuple
 # if gpu is to be used
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+global nextReady;
+
 
 Transition = namedtuple('Transition',
  ('state', 'action', 'next_state', 'reward'))
@@ -239,6 +241,8 @@ class Entity:
         self.internalRandom = random.seed()
         self.speed = 0
         self.index = index
+        self.reward = 0
+        self.done = False
         if animal == "Wolf":
             self.acceleration = 1
             self.deceleration = 0.5
@@ -330,6 +334,20 @@ class Entity:
         #tempString += str(round(self.length, 3)) + "," + str(round(self.width, 3))
         return tempString + "O"
 
+    def getCurrentState(self):
+        cState = getWolfVision(self.index)
+        cState.append(self.speed/self.maxspeed)
+        cState.append((self.rot%360)/360)
+
+    def getNextState(self):
+        if(nextReady == 1):
+            return self.getCurrentState()
+
+    def getReward(self):
+        return self.getReward()
+    def done(self):
+        return self.getDone()
+
     def objectInf(self):
         tempString = ""
         tempString += str(self.index) + "|"
@@ -339,42 +357,48 @@ class Entity:
 
 
 
-animals = []
-
-animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1))
-animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2))
-animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3))
-animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4))
-
-saveFile = ""
-
-for y in range(0, 10):
-
-    #TODO reset positions between generations
-    for x in range(0, 1000):
-        if(debug):
-            print("iteration: " + str(x))
-
-        saveFile += "T"
-
-        for i in range (len(animals)):
-            animals[i].inputChange();
-            animals[i].move();
-            saveFile += animals[i].asString()
-    saveFile += "\n"
-
-endFile = ""
-
-for i in range (len(animals)):
-    animals[i].inputChange();
-    animals[i].move();
-    saveFile += animals[i].asString()
-    endFile += animals[i].objectInf()
 
 
-endFile += "B"
-endFile += saveFile
+class Game:
+    def __init__(self):
+        self.index = 0
+        self.gen = 0
+        self.saveFile = ""
+        self.animals = []
+
+    def gameReset(self):
+        self.gen = self.gen + 1
+        self.animals = []
+
+        self.animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1))
+        self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2))
+        self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3))
+        self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4))
+        self.saveFile += "\n"
+
+    def nextState(self):
+        self.index = self.index + 1
+        self.saveFile += "T"
+        for i in range (len(self.animals)):
+            self.animals[i].inputChange();
+            self.animals[i].move();
+            self.saveFile += self.animals[i].asString()
+
+    def done(self):
+        endFile = ""
+
+        for i in range(len(self.animals)):
+            self.animals[i].inputChange();
+            self.animals[i].move();
+            self.saveFile += self.animals[i].asString()
+            endFile += self.animals[i].objectInf()
+
+        endFile += "B"
+        endFile += self.saveFile
+
+        with open("Output.txt", "w") as text_file:
+            text_file.write(endFile)
 
 
-with open("Output.txt", "w") as text_file:
-    text_file.write(endFile)
+
+
