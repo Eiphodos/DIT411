@@ -4,6 +4,12 @@ import time
 
 def distanceToObject(radius, objPos, line1, line2, visionLength):
 
+    distToline1 = math.sqrt( (line1[0] - objPos[0])**2 + (line1[1] - objPos[1])**2 )
+    distToline2 = math.sqrt( (line2[0] - objPos[0])**2 + (line2[1] - objPos[1])**2 )
+
+    if(distToline1 > visionLength + radius or distToline2 > visionLength + radius):
+        return -1;
+
     x = np.array(objPos)
     u = np.array(line1)
     v = np.array(line2)
@@ -17,14 +23,10 @@ def distanceToObject(radius, objPos, line1, line2, visionLength):
 
     distanceLineToObject = math.sqrt( (intersectPos[0] - objPos[0])**2 + (intersectPos[1] - objPos[1])**2 )
 
-    lineLength = math.sqrt( (line1[0] - line2[0])**2 + (line1[1] - line2[1])**2 )
-    distToline1 = math.sqrt( (line1[0] - objPos[0])**2 + (line1[1] - objPos[1])**2 )
-    distToline2 = math.sqrt( (line2[0] - objPos[0])**2 + (line2[1] - objPos[1])**2 )
-
     if(distanceLineToObject <= radius):
         orginToIntersectDistance = math.sqrt( (line1[0] - intersectPos[0])**2 + (line1[1] - intersectPos[1])**2 )
 
-        if(orginToIntersectDistance < lineLength and distToline1 <= lineLength + radius and distToline2 <= lineLength + radius):
+        if(orginToIntersectDistance < visionLength and distToline1 <= visionLength + radius and distToline2 <= visionLength + radius):
             return (orginToIntersectDistance)
         elif(distToline1 <= radius or distToline2 <= radius):
             return (orginToIntersectDistance)
@@ -193,7 +195,7 @@ def getWolfVision(wolfIndexPassed):
 
 if __name__ == '__main__':
     start_time = time.time()
-    ticks = 100000;
+    ticks = 10000;
 
     print("testing iterations: " + str(ticks))
     for i in range(ticks):
