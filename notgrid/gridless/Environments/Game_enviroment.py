@@ -32,7 +32,7 @@ class Game_enviroment(Base_Environment):
         return self.game_environment.getCurrentState()
 
     def get_next_state(self):
-        if(self.game_environment.index > 100):
+        if(self.game_environment.index > 200):
             self.done = True
         self.game_environment.nextState(None)
         return self.game_environment.getCurrentState()
@@ -41,7 +41,8 @@ class Game_enviroment(Base_Environment):
         return self.game_environment.getReward()
 
     def get_done(self):
-        return self.game_environment.done()
+        self.game_environment.done()
+        return self.done
 
     def reset_environment(self):
         self.state = self.game_environment.gameReset()
