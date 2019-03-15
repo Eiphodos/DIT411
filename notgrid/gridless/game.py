@@ -78,7 +78,6 @@ class Entity:
             vision.append(self.speed / self.maxspeed)
 
             for i in range(vision):
-                print("appendingToState")
                 self.game.state.append[vision[i]]
 
 
@@ -157,8 +156,6 @@ class Entity:
 
 class Game:
     def __init__(self):
-        print("initializing Game")
-
         self.index = 0
         self.gen = 0
         self.saveFile = ""
@@ -203,6 +200,7 @@ class Game:
     def gameReset(self):
         self.gen = self.gen + 1
         self.animals = []
+        self.index = 0
 
         self.animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1, self))
         self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
@@ -210,30 +208,26 @@ class Game:
         self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
         self.saveFile += "\n"
 
-
-        #TODO fix/change this!!!!!!!!!!!!!
-        return self.state
-
     def controllableAgentAmount(self):
         return len(self.animals) - 1
 
-    def nextState(self, actionArray):
-        print("in nextState")
-
+    def nextState(self):
         self.state = []
+        #print("Action: " + str(self.index))
         self.index = self.index + 1
         self.saveFile += "T"
-
-
-
         for i in range(len(self.animals)):
-
-            actions = (actionArray[2*i], actionArray[2*i+1])
-
-            self.animals[i].inputChange(actions);
+            #self.animals[i].inputChange(actionArray[i]);
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
-        return self.getCurrentState(), self.getReward(), self.done()
+
+
+    def conductAction(self, actionArray):
+        #for i in range(len(self.animals)):
+            #self.animals[i].inputChange(actionArray[i]);
+
+
+        return self.getCurrentState(), self.getReward(), self.done(), 1
 
     def done(self):
         endFile = ""
@@ -250,31 +244,39 @@ class Game:
         endFile += "B"
         endFile += self.saveFile
 
-        with open("Output.txt", "w") as text_file:
-            text_file.write(endFile)
+        #with open("Output.txt", "w") as text_file:
+        #    text_file.write(endFile)
+
+        if(self.index > 500):
+            return True
+        else:
+            return False
 
     def getCurrentState(self):
+        self.state = []
+        for i in range(len(self.animals)):
+            self.state += self.getWolfVision(self.animals[i].index)
         return self.state
 
     def getReward(self):
         reward = 0
         closestSheepDistance = 100000
-        for i in range(self.animals):
+        for i in range(len(self.animals)):
             animal = self.animals[i]
 
             #is wolf
             if(animal.animal == 1):
-                xDelta = self.sheepPosition.posX - animal.posX
-                yDelta = self.sheepPosition.posY - animal.posY
+                xDelta = self.sheepPosition[0] - animal.posX
+                yDelta = self.sheepPosition[1] - animal.posY
 
                 distanceToSheep = math.sqrt(xDelta**2 +yDelta**2)
 
                 closestSheepDistance = min(closestSheepDistance, distanceToSheep)
 
             if (closestSheepDistance < self.radius):
-                reward = 2000
+                reward = 1000
             else:
-                reward = 1000 - closestDistance;
+                reward = (1000 - closestSheepDistance)/500;
         return reward;
 
     def getWolfVision(self, wolfIndexPassed):

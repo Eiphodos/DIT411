@@ -19,31 +19,35 @@ class Game_enviroment(Base_Environment):
     def conduct_action(self, action):
         if type(action) is np.ndarray:
             action = action[0]
-        self.next_state, self.reward, self.done, _ = self.nextState(action)
+        self.next_state, self.reward, self.done, _ = self.game_environment.conductAction(action)
 
     def get_action_size(self):
         return 2 * self.game_environment.controllableAgentAmount()
 
     def get_state_size(self):
-        return len(self.game_environment.getCurrentState())
+        return 324
+        #return len(self.game_environment.getCurrentState())
 
     def get_state(self):
         return self.game_environment.getCurrentState()
 
     def get_next_state(self):
-        return self.game_environment.nextState()
+        #if(self.game_environment.index > 8):
+        #    self.done = True
+        self.game_environment.nextState()
+        return self.game_environment.getCurrentState()
 
     def get_reward(self):
         return self.game_environment.getReward()
 
     def get_done(self):
-        return self.game_environment.done()
+        #self.game_environment.done()
+        return self.done
 
     def reset_environment(self):
-        self.state = self.game_environment.reset()
+        self.state = self.game_environment.gameReset()
 
     def visualise_agent(self, agent):
-        print("visualizing agent")
 
         env = self.game_environment
 
@@ -63,13 +67,15 @@ class Game_enviroment(Base_Environment):
         env.close()
 
     def get_max_steps_per_episode(self):
-        return float("inf")
+        return 10000
 
     def get_action_types(self):
         return "CONTINUOUS"
+        #return "DISCRETE"
+
 
     def get_score_to_win(self):
-        return 1995
+        return 9995
 
     def get_rolling_period_to_calculate_score_over(self):
         return 10

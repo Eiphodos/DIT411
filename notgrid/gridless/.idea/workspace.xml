@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ea6c6f92-2b90-4261-850a-3c302523e6df" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environments/Game_enviroment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environments/Game_enviroment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Cart_Pole_Environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Cart_Pole_Environment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Results/Cart_Pole/Results.py" beforeDir="false" afterPath="$PROJECT_DIR$/Results/Cart_Pole/Results.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
-    </list>
+    <list default="true" id="adb6edc4-6b5a-4806-ac1a-098384f10166" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,38 +9,41 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/gridless$game.coverage" NAME="game Coverage Results" MODIFIED="1552587901412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/untitled1$Results__1_.coverage" NAME="Results (1) Coverage Results" MODIFIED="1552518083460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Lunar_Lander_Continuous" />
-    <SUITE FILE_PATH="coverage/untitled1$Results.coverage" NAME="Results Coverage Results" MODIFIED="1552516662386" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Cart_Pole" />
-    <SUITE FILE_PATH="coverage/tese$Results.coverage" NAME="Results Coverage Results" MODIFIED="1552578694533" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Cart_Pole" />
+    <SUITE FILE_PATH="coverage/untitled2$Results.coverage" NAME="Results Coverage Results" MODIFIED="1552625228143" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Cart_Pole" />
+    <SUITE FILE_PATH="coverage/gridless$Game_enviroment.coverage" NAME="Game_enviroment Coverage Results" MODIFIED="1552662385955" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Environments" />
+    <SUITE FILE_PATH="coverage/gridless$Results.coverage" NAME="Results Coverage Results" MODIFIED="1552666282703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Results/Cart_Pole" />
+    <SUITE FILE_PATH="coverage/untitled2$game.coverage" NAME="game Coverage Results" MODIFIED="1552619386701" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Results/Cart_Pole/Results.py">
+        <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="180">
+              <caret line="69" column="53" lean-forward="true" selection-start-line="69" selection-start-column="53" selection-end-line="69" selection-end-column="53" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/pkg_resources/__init__.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Agents/Base_Agent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="2292" lean-forward="true" selection-start-line="2292" selection-end-line="2292" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Cart_Pole_Environment.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1122">
-              <caret line="66" column="27" selection-start-line="66" selection-start-column="27" selection-end-line="66" selection-end-column="27" />
+            <state relative-caret-position="357">
+              <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Results/Cart_Pole/Results.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="29" column="30" lean-forward="true" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
+              <folding>
+                <element signature="e#0#51#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -55,8 +52,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Environments/Game_enviroment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1156">
-              <caret line="68" column="24" selection-start-line="68" selection-start-column="24" selection-end-line="68" selection-end-column="24" />
+            <state relative-caret-position="-391">
+              <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -64,13 +61,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="214" column="25" selection-start-line="214" selection-start-column="25" selection-end-line="214" selection-end-column="25" />
+            <state relative-caret-position="440">
+              <caret line="278" column="34" lean-forward="true" selection-start-line="278" selection-start-column="34" selection-end-line="278" selection-end-column="34" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#7068#7096#0" />
+                <element signature="e#8267#8419#0" />
+                <element signature="e#8880#12093#0" />
+                <element signature="e#12180#13379#0" />
+                <element signature="e#13468#14010#0" />
+                <element signature="e#14067#14474#0" />
+                <element signature="e#14528#15516#0" />
               </folding>
             </state>
           </provider>
@@ -79,40 +83,61 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Fetch_Reach_Environment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="69" column="8" selection-start-line="69" selection-start-column="8" selection-end-line="69" selection-end-column="27" />
+            <state relative-caret-position="102">
+              <caret line="42" column="23" lean-forward="true" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Utilities/Utility_Functions.py">
+        <entry file="file://$PROJECT_DIR$/Utilities/Data_Structures/Replay_Buffer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2643">
-              <caret line="41" column="57" selection-start-line="41" selection-start-column="26" selection-end-line="41" selection-end-column="57" />
+            <state relative-caret-position="350">
+              <caret line="41" selection-start-line="41" selection-end-line="41" />
             </state>
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/nn/functional.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="1351" selection-start-line="1351" selection-end-line="1351" />
+              <folding>
+                <element signature="e#51725#51863#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Cart_Pole_Environment.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="14" column="25" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="25" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Environments/Base_Environment.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
     </leaf>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>max score seen</find>
-      <find>20</find>
-      <find>200</find>
-      <find>Cart_Pole_Environment</find>
-      <find>vision</find>
-      <find>continous</find>
-      <find>state</find>
-      <find>nextReady</find>
+      <find>self.state</find>
+      <find>compute_q_values_for_next_states</find>
+      <find>compute_q_targets</find>
+      <find>self.done</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -121,22 +146,21 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Utilities/Parallel_Experience_Generator.py" />
-        <option value="$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Game_enviroment.py" />
-        <option value="$PROJECT_DIR$/Environments/Game_enviroment.py" />
-        <option value="$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Cart_Pole_Environment.py" />
+        <option value="$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/nn/init.py" />
+        <option value="$PROJECT_DIR$/Utilities/Data_Structures/Replay_Buffer.py" />
+        <option value="$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py" />
         <option value="$PROJECT_DIR$/Results/Cart_Pole/Results.py" />
+        <option value="$PROJECT_DIR$/Environments/Game_enviroment.py" />
         <option value="$PROJECT_DIR$/game.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="632" />
-    <option name="y" value="194" />
+    <option name="x" value="-9" />
+    <option name="y" value="-1" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -158,6 +182,12 @@
             <path>
               <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
               <item name="gridless" type="462c0819:PsiDirectoryNode" />
+              <item name="Agents" type="462c0819:PsiDirectoryNode" />
+              <item name="DQN_Agents" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gridless" type="462c0819:PsiDirectoryNode" />
               <item name="Environments" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -174,11 +204,8 @@
             <path>
               <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
               <item name="gridless" type="462c0819:PsiDirectoryNode" />
-              <item name="Utilities" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="gridless" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Results" type="462c0819:PsiDirectoryNode" />
+              <item name="Cart_Pole" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -188,19 +215,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\fredr\PycharmProjects\tese\Environments" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\fredr\PycharmProjects\tese" />
-      <recent name="C:\Users\fredr\PycharmProjects\untitled1" />
-    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -215,20 +231,20 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.Results">
-    <configuration name="Results (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="untitled1" />
+    <configuration name="Game_enviroment" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="untitled2" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Results/Lunar_Lander_Continuous" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Environments" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Results/Lunar_Lander_Continuous/Results.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Environments/Game_enviroment.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -238,7 +254,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Results" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="untitled1" />
+      <module name="untitled2" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -260,7 +276,7 @@
       <method v="2" />
     </configuration>
     <configuration name="game" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="untitled1" />
+      <module name="untitled2" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -284,8 +300,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Results" />
+        <item itemvalue="Python.Game_enviroment" />
         <item itemvalue="Python.game" />
-        <item itemvalue="Python.Results (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -294,30 +310,29 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ea6c6f92-2b90-4261-850a-3c302523e6df" name="Default Changelist" comment="" />
-      <created>1552515445991</created>
+      <changelist id="adb6edc4-6b5a-4806-ac1a-098384f10166" name="Default Changelist" comment="" />
+      <created>1552619323769</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1552515445991</updated>
-      <workItem from="1552515447220" duration="3024000" />
-      <workItem from="1552575892811" duration="2697000" />
-      <workItem from="1552579496839" duration="680000" />
+      <updated>1552619323769</updated>
+      <workItem from="1552619327959" duration="4028000" />
+      <workItem from="1552661289902" duration="6385000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6401000" />
+    <option name="totallyTimeSpent" value="10413000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25500527" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3672806" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -342,119 +357,48 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Utilities/Parallel_Experience_Generator.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="10" />
+          <url>file://$PROJECT_DIR$/game.py</url>
+          <line>219</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py</url>
+          <line>80</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py</url>
+          <line>69</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/game.py</url>
+          <line>271</line>
+          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="action.T.T.T.T.T.T.T.T.base" />
+        <watch expression="action.T.T.T.T.T.T.T.T.T" />
+        <watch expression="action.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.travis.yml" />
-    <entry file="file://$PROJECT_DIR$/Results/Fetch_Reach/Results.py" />
-    <entry file="file://C:/Program Files (x86)/Microsoft Visual Studio/Shared/Python36_64/Lib/multiprocessing/connection.py" />
-    <entry file="file://C:/Program Files (x86)/Microsoft Visual Studio/Shared/Python36_64/Lib/multiprocessing/reduction.py" />
-    <entry file="file://C:/Program Files (x86)/Microsoft Visual Studio/Shared/Python36_64/Lib/multiprocessing/pool.py" />
-    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/multiprocessing/reductions.py" />
-    <entry file="file://$PROJECT_DIR$/Agents/Policy_Gradient_Agents/PPO_Agent.py" />
-    <entry file="file://$PROJECT_DIR$/Utilities/Parallel_Experience_Generator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="14" column="63" lean-forward="true" selection-start-line="14" selection-start-column="63" selection-end-line="14" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Environments/Unity_Environments/Reacher_Environment_1_Arm.py" />
-    <entry file="file://$PROJECT_DIR$/Environments/Unity_Environments/Banana_Environment.py" />
-    <entry file="file://$PROJECT_DIR$/Results/Mountain_Car_Continuous/Results.py" />
-    <entry file="file://$PROJECT_DIR$/Environments/Unity_Environments/Tennis_Environment.py" />
-    <entry file="file://$PROJECT_DIR$/Results/Lunar_Lander_Continuous/Results.py" />
-    <entry file="file://$PROJECT_DIR$/Results/Tennis/Results.py" />
-    <entry file="file://$PROJECT_DIR$/Results/Bit_Flipping/Results.py" />
-    <entry file="file://$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Mountain_Car_Continuous_Environment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="26" column="25" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#58#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Lunar_Lander_Continuous.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-381" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Environments/Base_Environment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Utilities/Models/Linear_Model.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Agents/HER_Base.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Agents/Base_Agent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="104" column="49" selection-start-line="104" selection-start-column="49" selection-end-line="104" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vision.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="113" column="13" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
-          <folding>
-            <element signature="e#175#1203#0" />
-            <element signature="e#1278#1780#0" />
-            <element signature="e#1823#2189#0" />
-            <element signature="e#2229#3014#0" />
-            <element signature="e#3260#3374#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/init.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4845">
-          <caret line="289" selection-start-line="289" selection-end-line="289" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent_With_Fixed_Q_Targets.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Utilities/Models/Neural_Network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="57" selection-start-line="57" selection-end-line="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/torch/nn/modules/linear.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="816">
-          <caret line="55" selection-start-line="55" selection-end-line="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DDQN_Agent.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -462,69 +406,183 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DDQN_With_Prioritised_Experience_Replay.py">
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/nn/init.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-246">
+        <state relative-caret-position="224">
+          <caret line="291" column="9" selection-start-line="291" selection-start-column="9" selection-end-line="291" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/jit/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="1405" selection-start-line="1405" selection-end-line="1405" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/nn/modules/linear.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="64" column="20" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/nn/modules/container.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utilities/Models/Neural_Network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/autograd/grad_mode.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/nn/modules/module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="905" selection-start-line="905" selection-end-line="905" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="537" selection-start-line="537" selection-end-line="537" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Environments/OLOD_Game_enviroment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent_With_Fixed_Q_Targets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Utilities/Utility_Functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2643">
-          <caret line="41" column="57" selection-start-line="41" selection-start-column="26" selection-end-line="41" selection-end-column="57" />
+        <state relative-caret-position="190">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files (x86)/Microsoft Visual Studio/Shared/Python36_64/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="310" selection-start-line="310" selection-end-line="310" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Fetch_Reach_Environment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="69" column="8" selection-start-line="69" selection-start-column="8" selection-end-line="69" selection-end-column="27" />
+        <state relative-caret-position="102">
+          <caret line="42" column="23" lean-forward="true" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Environments/Open_AI_Gym_Environments/Cart_Pole_Environment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1122">
-          <caret line="66" column="27" selection-start-line="66" selection-start-column="27" selection-end-line="66" selection-end-column="27" />
+        <state relative-caret-position="187">
+          <caret line="14" column="25" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="25" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utilities/Data_Structures/Replay_Buffer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Agents/DQN_Agents/DQN_Agent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="69" column="53" lean-forward="true" selection-start-line="69" selection-start-column="53" selection-end-line="69" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Roaming/Python/Python36/site-packages/torch/nn/functional.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="1351" selection-start-line="1351" selection-end-line="1351" />
+          <folding>
+            <element signature="e#51725#51863#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Environments/Game_enviroment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1156">
-          <caret line="68" column="24" selection-start-line="68" selection-start-column="24" selection-end-line="68" selection-end-column="24" />
+        <state relative-caret-position="-391">
+          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Anaconda3/Lib/site-packages/pkg_resources/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="2292" lean-forward="true" selection-start-line="2292" selection-end-line="2292" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Results/Cart_Pole/Results.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="442">
+          <caret line="29" column="30" lean-forward="true" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="214" column="25" selection-start-line="214" selection-start-column="25" selection-end-line="214" selection-end-column="25" />
+        <state relative-caret-position="440">
+          <caret line="278" column="34" lean-forward="true" selection-start-line="278" selection-start-column="34" selection-end-line="278" selection-end-column="34" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#7068#7096#0" />
+            <element signature="e#8267#8419#0" />
+            <element signature="e#8880#12093#0" />
+            <element signature="e#12180#13379#0" />
+            <element signature="e#13468#14010#0" />
+            <element signature="e#14067#14474#0" />
+            <element signature="e#14528#15516#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Environments/Base_Environment.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Agents/Base_Agent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
