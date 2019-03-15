@@ -244,8 +244,8 @@ class Game:
         endFile += "B"
         endFile += self.saveFile
 
-        with open("Output.txt", "w") as text_file:
-            text_file.write(endFile)
+        #with open("Output.txt", "w") as text_file:
+        #    text_file.write(endFile)
 
         if(self.index > 500):
             return True
