@@ -1,17 +1,16 @@
 import gym
 import numpy as np
-import notgrid.gridless.game as g
+import game as g
 from pyvirtualdisplay import Display
 import matplotlib.pyplot as plt
 
-from notgrid.gridless.Environments.Base_Environment import Base_Environment
+from Environments.Base_Environment import Base_Environment
 
 class Game_enviroment(Base_Environment):
 
-    def __init__(self, entity):
-        self.game_environment = gym.make("CartPole-v0")
-        self.entity = entity;
-        self.state = entity.getCurrentState()
+    def __init__(self):
+        self.game_environment = g.Game();
+        self.state = self.game_environment.getCurrentState()
         self.next_state = None
         self.reward = None
         self.done = False
@@ -20,25 +19,25 @@ class Game_enviroment(Base_Environment):
     def conduct_action(self, action):
         if type(action) is np.ndarray:
             action = action[0]
-        self.next_state, self.reward, self.done, _ = self.game_environment.step(action)
+        self.next_state, self.reward, self.done, _ = self.nextState(action)
 
     def get_action_size(self):
-        return 2
+        return 2 * self.game_environment.controllableAgentAmount()
 
     def get_state_size(self):
-        return len(self.entity.getCurrentState())
+        return len(self.game_environment.getCurrentState())
 
     def get_state(self):
-        return self.entity.getCurrentState()
+        return self.game_environment.getCurrentState()
 
     def get_next_state(self):
-        return self.entity.getNextState()
+        return self.game_environment.nextState()
 
     def get_reward(self):
-        return self.entity.getReward()
+        return self.game_environment.getReward()
 
     def get_done(self):
-        return self.entity.done()
+        return self.game_environment.done()
 
     def reset_environment(self):
         self.state = self.game_environment.reset()
@@ -73,4 +72,3 @@ class Game_enviroment(Base_Environment):
 
     def get_rolling_period_to_calculate_score_over(self):
         return 10
-

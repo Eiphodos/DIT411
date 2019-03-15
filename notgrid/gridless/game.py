@@ -67,14 +67,21 @@ class Entity:
         self.posY = max(self.posY, self.game.bottomLimit)
         self.posY = min(self.posY, self.game.topLimit)
 
-    def inputChange(self):
+    def inputChange(self, actions):
         # a = NeuralNetwork()
         # a.funca()
         if (self.animal == 1):
-            self.speedChange((random.randrange(-10, 10) / 10.0))
-            self.rotationChange(random.randrange(-3600, 3600) / 10.0)
+            self.speedChange(actions[0])
+            self.rotationChange(10 * actions[1])
 
             vision = self.game.getWolfVision(self.index)
+            vision.append(self.speed / self.maxspeed)
+
+            for i in range(vision):
+                self.game.state.append[vision[i]]
+
+
+            self.game.wolfVision.append(vision);
 
             if (self.game.debug):
                 print("x: " + str(self.posX))
@@ -136,11 +143,8 @@ class Entity:
         if (nextReady == 1):
             return self.getCurrentState()
 
-    def getReward(self):
-        return self.getReward()
-
     def done(self):
-        return self.getDone()
+        return self.done
 
     def objectInf(self):
         tempString = ""
@@ -190,6 +194,9 @@ class Game:
         self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3, self))
         self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
 
+        self.state = []
+
+
     def gameReset(self):
         self.gen = self.gen + 1
         self.animals = []
@@ -200,20 +207,28 @@ class Game:
         self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
         self.saveFile += "\n"
 
-    def nextState(self):
+    def controllableAgentAmount(self):
+        return len(self.animals) - 1
+
+    def nextState(self, actionArray):
+        self.state = []
         self.index = self.index + 1
         self.saveFile += "T"
         for i in range(len(self.animals)):
-            self.animals[i].inputChange();
+            self.animals[i].inputChange(actionArray[i]);
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
+        return self.getCurrentState(), self.getReward(), self.done()
 
     def done(self):
         endFile = ""
 
         for i in range(len(self.animals)):
-            self.animals[i].inputChange();
-            self.animals[i].move();
+
+            #these two should be removed?
+            #self.animals[i].inputChange();
+            #self.animals[i].move();
+
             self.saveFile += self.animals[i].asString()
             endFile += self.animals[i].objectInf()
 
@@ -222,6 +237,30 @@ class Game:
 
         with open("Output.txt", "w") as text_file:
             text_file.write(endFile)
+
+    def getCurrentState(self):
+        return self.state
+
+    def getReward(self):
+        reward = 0
+        closestSheepDistance = 100000
+        for i in range(self.animals):
+            animal = self.animals[i]
+
+            #is wolf
+            if(animal.animal == 1):
+                xDelta = self.sheepPosition.posX - animal.posX
+                yDelta = self.sheepPosition.posY - animal.posY
+
+                distanceToSheep = math.sqrt(xDelta**2 +yDelta**2)
+
+                closestSheepDistance = min(closestSheepDistance, distanceToSheep)
+
+            if (closestSheepDistance < self.radius):
+                reward = 1000
+            else:
+                reward = 1000 - closestDistance;
+        return reward;
 
     def getWolfVision(self, wolfIndexPassed):
 
@@ -407,7 +446,7 @@ class Game:
 game = Game()
 for y in range(0, 10):
     for x in range(0, 1000):
-        game.nextState()
+        pass#game.nextState()
     game.gameReset()
 
 game.done()

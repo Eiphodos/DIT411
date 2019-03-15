@@ -1,5 +1,5 @@
-from notgrid.gridless.Agents.DQN_Agents.DQN_Agent import DQN_Agent
-from notgrid.gridless.Agents.HER_Base import HER_Base
+from Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from Agents.HER_Base import HER_Base
 
 class DQN_HER_Agent(DQN_Agent, HER_Base):
     """DQN algorithm with hindsight experience replay"""

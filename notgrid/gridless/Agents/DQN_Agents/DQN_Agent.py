@@ -1,6 +1,6 @@
-from notgrid.gridless.Agents.Base_Agent import Base_Agent
-from notgrid.gridless.Utilities.Models.Neural_Network import Neural_Network
-from notgrid.gridless.Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
+from Agents.Base_Agent import Base_Agent
+from Utilities.Models.Neural_Network import Neural_Network
+from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
