@@ -212,6 +212,7 @@ class Game:
 
     def nextState(self):
         self.state = []
+        print("Action: " + str(self.index))
         self.index = self.index + 1
         self.saveFile += "T"
         for i in range(len(self.animals)):
@@ -221,9 +222,9 @@ class Game:
 
 
     def conductAction(self, actionArray):
-        for i in range(len(self.animals)):
+        #for i in range(len(self.animals)):
             #self.animals[i].inputChange(actionArray[i]);
-            print(np.asarray(actionArray))
+
 
         return self.getCurrentState(), self.getReward(), self.done(), 1
 
@@ -244,6 +245,11 @@ class Game:
 
         with open("Output.txt", "w") as text_file:
             text_file.write(endFile)
+
+        if(self.index > 500):
+            return True
+        else:
+            return False
 
     def getCurrentState(self):
         self.state = []
