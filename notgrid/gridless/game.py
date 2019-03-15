@@ -210,7 +210,7 @@ class Game:
     def controllableAgentAmount(self):
         return len(self.animals) - 1
 
-    def nextState(self, actionArray):
+    def nextState(self):
         self.state = []
         self.index = self.index + 1
         self.saveFile += "T"
@@ -218,6 +218,13 @@ class Game:
             #self.animals[i].inputChange(actionArray[i]);
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
+
+
+    def conductAction(self, actionArray):
+        for i in range(len(self.animals)):
+            #self.animals[i].inputChange(actionArray[i]);
+            print(np.asarray(actionArray))
+
         return self.getCurrentState(), self.getReward(), self.done(), 1
 
     def done(self):

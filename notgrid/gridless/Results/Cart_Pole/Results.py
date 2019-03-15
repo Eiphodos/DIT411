@@ -43,7 +43,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
+    AGENTS = [DQN_Agent,DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay]
     #AGENTS = [PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent,\
              #Genetic_Agent, Hill_Climbing_Agent]
     print("_______config : " + str(config))
