@@ -240,6 +240,7 @@ class State:
         self.sheep_pos = new_pos
 
 
+    # Function used for multi-agent system.
     def frame_step(self, tensor_action1, tensor_action2, tensor_action3):
         reward1 = 0
         reward2 = 0
@@ -259,7 +260,6 @@ class State:
         if sum(tensor_action1) != 1 or sum(tensor_action2) != 1 or sum(tensor_action3) != 1:
             raise ValueError('Not one action per wolf')
 
-        wolf = 0
         dir = 0
         counter = 0
         for action in tensor_action1:
@@ -284,9 +284,59 @@ class State:
             reward1 = self.reward_sheep
             reward2 = self.reward_sheep
             reward3 = self.reward_sheep
+            old_grid = self.grid
             self.__init__(self.grid_size, self.wolf_speed, self.sheep_speed)
-            return self.grid, reward1, reward2, reward3, True
+            return old_grid, reward1, reward2, reward3, True
         else:
             #Move the sheep
             self.move_sheep()
             return self.grid, reward1, reward2, reward3, False
+
+    #Function used for single agent system
+    def frame_step_wolf(self, tensor_action):
+        reward = 0
+
+        #Move wolves
+        # Actions meanings
+        # action[0] == 1 -  wolf1 do nothing
+        # action[1] == 1 -  wolf1 move north
+        # action[2] == 1 -  wolf1 move east
+        # action[3] == 1 -  wolf1 move south
+        # action[4] == 1 -  wolf1 move west
+        # action[5] == 1 -  wolf2 do nothing
+        # action[6] == 1 -  wolf2 move north
+        # action[7] == 1 -  wolf2 move east
+        # action[8] == 1 -  wolf2 move south
+        # action[9] == 1 -  wolf2 move west
+        # action[10] == 1 -  wolf3 do nothing
+        # action[11] == 1 -  wolf3 move north
+        # action[12] == 1 -  wolf3 move east
+        # action[13] == 1 -  wolf3 move south
+        # action[14] == 1 -  wolf3 move west
+        tensor_action = tensor_action.cpu().numpy().astype(int)
+
+        if sum(tensor_action) != 1:
+            raise ValueError('Not one action per wolf')
+
+        wolf = 0
+        dir = 0
+        counter = 0
+        for action in tensor_action:
+            if action == 1:
+                reward = self.move_wolf(wolf, dir)
+            counter += 1
+            dir = counter % 5
+            wolf = counter // 5
+
+        if (reward == self.reward_sheep):
+            #Sheep was caught so reset game state
+            old_grid = self.grid
+            self.__init__(self.grid_size, self.wolf_speed, self.sheep_speed)
+            return old_grid, reward, True
+        else:
+            return self.grid, reward, False
+
+    # Function used for single agent system
+    def frame_step_sheep(self):
+        self.move_sheep()
+        return self.grid

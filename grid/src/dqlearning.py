@@ -15,28 +15,45 @@ from collections import namedtuple
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
 
 def main(mode):
+
+    # Game definitions used for testing and training
+    grid_size = 5
+    wolf_speed = 1
+    sheep_speed = 1
+
+
+    # Cuda gave in testing worse performance than running it on a high end CPU. Possibly because matrixes are not large enough for for the GPU to be better at it.
     #cuda_available = torch.cuda.is_available()
     cuda_available = False
 
-    if mode == 'test':
-        model1 = torch.load('trained_model/current_model1_25000.pth', map_location='cpu' if not cuda_available else None).eval()
-        model2 = torch.load('trained_model/current_model2_25000.pth', map_location='cpu' if not cuda_available else None).eval()
-        model3 = torch.load('trained_model/current_model3_25000.pth', map_location='cpu' if not cuda_available else None).eval()
+    # Testing multi agent system
+    if mode == 'multi-test':
+        model1 = torch.load('trained_model/current_multi_model1_50000.pth', map_location='cpu' if not cuda_available else None).eval()
+        model2 = torch.load('trained_model/current_multi_model2_50000.pth', map_location='cpu' if not cuda_available else None).eval()
+        model3 = torch.load('trained_model/current_multi_model3_50000.pth', map_location='cpu' if not cuda_available else None).eval()
 
         if cuda_available:
             model1 = model1.cuda()
             model2 = model2.cuda()
             model3 = model3.cuda()
-        test(model1, model2, model3)
+        test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda_available)
 
+    # Testing single agent system
+    elif mode == 'single-test':
+        model = torch.load('trained_model/current_single_model_50000.pth', map_location='cpu' if not cuda_available else None).eval()
 
-    elif mode == 'train':
+        if cuda_available:
+            model = model1.cuda()
+        test_single(model, grid_size, wolf_speed, sheep_speed, cuda_available)
+
+    # Training multi agent system
+    elif mode == 'multi-train':
         if not os.path.exists('trained_model/'):
             os.mkdir('trained_model/')
 
-        model1 = NeuralNetwork()
-        model2 = NeuralNetwork()
-        model3 = NeuralNetwork()
+        model1 = NeuralNetwork(5)
+        model2 = NeuralNetwork(5)
+        model3 = NeuralNetwork(5)
 
         if cuda_available:
             model1 = model1.cuda()
@@ -47,27 +64,35 @@ def main(mode):
         model2.apply(init_weights)
         model3.apply(init_weights)
         start = time.time()
-        train_networks(model1, model2, model3 , start)
+        train_networks(model1, model2, model3 , start, grid_size, wolf_speed, sheep_speed, cuda_available)
+
+    # Training single agent system
+    elif mode == 'single-train':
+        if not os.path.exists('trained_model/'):
+            os.mkdir('trained_model/')
+
+        model = NeuralNetwork(15)
+
+        if cuda_available:
+            model = model.cuda()
+
+        model.apply(init_weights)
+        start = time.time()
+        train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda_available)
 
 
-def test(model1, model2, model3):
+def test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda):
 
-    grid_size = 5
-    wolf_speed = 1
-    sheep_speed = 1
+    # Set cuda
+    cuda_available = cuda
 
-    state = State(grid_size, wolf_speed, sheep_speed)
+    # Instantiate game
+    game_state = State(grid_size, wolf_speed, sheep_speed)
 
-    #cuda_available = torch.cuda.is_available()
-    cuda_available = False
-
-     # instantiate game
-    game_state = State(5, 1, 1)
-
+    # Set initial action to 'do nothing' for all three wolves
     action1 = torch.zeros([model1.n_actions], dtype=torch.float32)
     action2 = torch.zeros([model2.n_actions], dtype=torch.float32)
     action3 = torch.zeros([model3.n_actions], dtype=torch.float32)
-    # Set initial action to 'do nothing' for all three wolves
     action1[0] = 1
     action2[0] = 1
     action3[0] = 1
@@ -84,7 +109,7 @@ def test(model1, model2, model3):
 
     if cuda_available:
         tensor_data = tensor_data.cuda()
-    # Concatenate four last grids
+    # Unsqueese to get the correct dimensons
     state = tensor_data.unsqueeze(0).unsqueeze(0)
 
     while not finished:
@@ -129,9 +154,85 @@ def test(model1, model2, model3):
         # set state to be state_1
         state = state_1
 
-def train_networks(model1, model2, model3, start):
+def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
 
-    grid_size = 5
+    # Set cuda
+    cuda_available = cuda
+
+    # Instantiate game
+    game_state = State(grid_size, wolf_speed, sheep_speed)
+
+    # Set initial action to 'do nothing'
+    action = torch.zeros([model.n_actions], dtype=torch.float32)
+    action[0] = 1
+
+    if cuda_available:  # put on GPU if CUDA is available
+        action = action.cuda()
+
+    #Get game grid and reward
+    grid, reward, finished = game_state.frame_step_wolf(action)
+
+    # Create drawing board and draw initial state
+    window = Draw(grid_size, grid, False)
+    window.update_window(grid)
+
+    #Convert to tensor
+    tensor_data = torch.Tensor(grid)
+
+    if cuda_available:
+        tensor_data = tensor_data.cuda()
+    # Unsqueese to get the correct dimensons
+    state = tensor_data.unsqueeze(0).unsqueeze(0)
+
+    # Counter to know when to move the sheep
+    sheep_counter = 1
+
+    while not finished:
+
+        # get output from the neural network for moving a wolf
+        output = model(state)[0]
+
+        # initialize actions
+        action = torch.zeros([model.n_actions], dtype=torch.float32)
+        if cuda_available:  # put on GPU if CUDA is available
+            action = action.cuda()
+    
+        # Action #1
+        action_index = torch.argmax(output)
+        if cuda_available:
+            action_index = action_index.cuda()    
+        action[action_index] = 1
+
+
+        # Update state
+        grid, reward, finished = game_state.frame_step_wolf(action)
+        tensor_data_1 = torch.Tensor(grid)
+        if cuda_available:
+            tensor_data_1 = tensor_data_1.cuda()
+        state_1 = tensor_data_1.unsqueeze(0).unsqueeze(0)
+
+        #Draw new state
+        window.update_window(grid)
+
+        # Move sheep every 3 "turns"
+        if sheep_counter == 3:
+            # Update state
+            grid = game_state.frame_step_sheep()
+            tensor_data_1 = torch.Tensor(grid)
+            if cuda_available:
+                tensor_data_1 = tensor_data_1.cuda()
+            state_1 = tensor_data_1.unsqueeze(0).unsqueeze(0)
+            sheep_counter = 0
+            #Draw new state
+            window.update_window(grid)
+
+        
+        # set state to be state_1
+        state = state_1
+        sheep_counter += 1
+
+
+def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_speed, cuda):
 
     # define Adam optimizer
     optimizer1 = optim.Adam(model1.parameters(), model1.learn_rate)
@@ -143,9 +244,7 @@ def train_networks(model1, model2, model3, start):
     replay_memory2 = []
     replay_memory3 = []
 
-    #Cuda
-    #cuda_available = torch.cuda.is_available()
-    cuda_available = False
+    cuda_available = cuda
 
     # initialize epsilon value
     epsilon1 = model1.init_epsilon
@@ -159,7 +258,7 @@ def train_networks(model1, model2, model3, start):
     criterion = nn.MSELoss()
 
      # instantiate game
-    game_state = State(grid_size, 1, 1)
+    game_state = State(grid_size, wolf_speed, sheep_speed)
 
     action1 = torch.zeros([model1.n_actions], dtype=torch.float32)
     action2 = torch.zeros([model2.n_actions], dtype=torch.float32)
@@ -383,23 +482,204 @@ def train_networks(model1, model2, model3, start):
             avg_steps_per_catch = iteration / catches
 
         if iteration % 25000 == 0:
-            torch.save(model1, "trained_model/current_model1_" +  str(iteration) +  ".pth")
-            torch.save(model2, "trained_model/current_model2_" +  str(iteration) +  ".pth")
-            torch.save(model3, "trained_model/current_model3_" +  str(iteration) +  ".pth")
+            torch.save(model1, "trained_model/current_multi_model1_" +  str(iteration) +  ".pth")
+            torch.save(model2, "trained_model/current_multi_model2_" +  str(iteration) +  ".pth")
+            torch.save(model3, "trained_model/current_multi_model3_" +  str(iteration) +  ".pth")
 
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "epsilon:", epsilon1, "action:",
                 action_index_1.cpu().detach().numpy(), "reward:", reward1.numpy()[0][0], "Q max:",
                 np.max(output1.cpu().detach().numpy()))
 
+def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda):
 
+    enable_graphics = False
+
+    # define Adam optimizer
+    optimizer = optim.Adam(model.parameters(), model.learn_rate)
+
+    # initialize replay memory
+    replay_memory = []
+
+    cuda_available = cuda
+
+    # initialize epsilon value
+    epsilon = model.init_epsilon
+    epsilon_decrements = np.linspace(model.init_epsilon, model.fin_epsilon, model.iterations)
+
+    # initialize mean squared error loss
+    criterion = nn.MSELoss()
+
+     # instantiate game
+    game_state = State(grid_size, wolf_speed, sheep_speed)
+
+    action = torch.zeros([model.n_actions], dtype=torch.float32)
+    # Set initial action to 'do nothing'
+    action[0] = 1
+
+    #Get game grid and reward
+    grid, reward, finished = game_state.frame_step_wolf(action)
+
+    #Convert to tensor
+    tensor_data = torch.Tensor(grid)
+
+    if cuda_available:
+        tensor_data = tensor_data.cuda()
+    # Concatenate four last grids
+    state = tensor_data.unsqueeze(0).unsqueeze(0)
+
+    # Initialize iterion counter for this epoch
+    iteration = 0
+    catches = 0
+    avg_steps_per_catch = 0
+
+    #Drawing while training
+    
+    if enable_graphics:
+        window = Draw(grid_size, grid, True)
+        window.update_window(grid)
+
+    # Counter to know when to move the sheep
+    sheep_counter = 1
+
+    while iteration < model.iterations:
+        time_get_actions = time.time()
+
+        # get output from the neural network
+        output = model(state)[0]
+
+        # initialize action
+        action = torch.zeros([model.n_actions], dtype=torch.float32)
+        if cuda_available:  # put on GPU if CUDA is available
+            action = action.cuda()
+        # epsilon greedy exploration
+        random_action = random.random() <= epsilon
+        action_index = [torch.randint(model.n_actions, torch.Size([]), dtype=torch.int)
+                        if random_action
+                        else torch.argmax(output)][0]
+
+        if cuda_available:  # put on GPU if CUDA is available
+            action_index= action_index.cuda()
+
+        action[action_index] = 1
+
+        print("Time to calculate actions: ",  time.time() - time_get_actions)
+
+        time_move_state = time.time()
+
+        #Get game grid and reward
+        grid, reward, finished = game_state.frame_step_wolf(action)
+        tensor_data_1 = torch.Tensor(grid)
+        if cuda_available:
+            tensor_data_1 = tensor_data_1.cuda()
+        state_1 = tensor_data_1.unsqueeze(0).unsqueeze(0)
+
+        if enable_graphics:
+            window.update_window(grid)
+
+        action = action.unsqueeze(0)
+        reward = torch.from_numpy(np.array([reward], dtype=np.float32)).unsqueeze(0)
+
+        # save transition to replay memory
+        replay_memory.append((state, action, reward, state_1, finished))
+
+        # if replay memory is full, remove the oldest transition
+        if len(replay_memory) > model.memory_size:
+            replay_memory.pop(0)
+
+        # epsilon annealing
+        epsilon = epsilon_decrements[iteration]
+
+        print("Time to calculate state: ",  time.time() - time_move_state)
+
+        time_calc_q = time.time()
+
+        # sample random minibatch
+        minibatch = random.sample(replay_memory, min(len(replay_memory), model.minibatch_size))
+
+        # unpack minibatch 1
+        state_batch = torch.cat(tuple(d[0] for d in minibatch))
+        action_batch = torch.cat(tuple(d[1] for d in minibatch))
+        reward_batch = torch.cat(tuple(d[2] for d in minibatch))
+        state_1_batch = torch.cat(tuple(d[3] for d in minibatch))
+
+        if cuda_available:  # put on GPU if CUDA is available
+            state_batch = state_batch.cuda()
+            action_batch = action_batch.cuda()
+            reward_batch = reward_batch.cuda()
+            state_1_batch = state_1_batch.cuda()
+
+        # get output for the next state
+        output_1_batch = model(state_1_batch)
+
+
+        # set y_j to r_j for terminal state, otherwise to r_j + gamma*max(Q)
+        y_batch = torch.cat(tuple(reward_batch[i] if minibatch[i][4]
+                            else reward_batch[i] + model.gamma * torch.max(output_1_batch[i])
+                            for i in range(len(minibatch))))
+
+        # extract Q-value
+        q_value = torch.sum(model(state_batch) * action_batch, dim=1)
+
+        print("Time to calculate q: ",  time.time() - time_calc_q)
+
+        time_update_nn = time.time()
+
+        # returns a new Tensor, detached from the current graph, the result will never require gradient
+        y_batch = y_batch.detach()
+
+        # calculate loss
+        loss = criterion(q_value, y_batch)
+
+        # PyTorch accumulates gradients by default, so they need to be reset in each pass
+        optimizer.zero_grad()
+
+        # do backward pass
+        loss.backward()
+
+        for param in model.parameters():
+            param.grad.data.clamp_(-1, 1)
+
+        optimizer.step()
+
+        print("Time to update nn: ",  time.time() - time_update_nn)
+
+        # Move sheep every 3 "turns"
+        if sheep_counter == 3:
+            # Update state
+            grid = game_state.frame_step_sheep()
+            tensor_data_1 = torch.Tensor(grid)
+            if cuda_available:
+                tensor_data_1 = tensor_data_1.cuda()
+            state_1 = tensor_data_1.unsqueeze(0).unsqueeze(0)
+            sheep_counter = 0
+            if enable_graphics:
+                window.update_window(grid)
+
+        # set state to be state_1
+        state = state_1
+
+        # Update counters
+        iteration += 1
+        sheep_counter += 1
+        if (finished):
+            catches += 1
+            avg_steps_per_catch = iteration / catches
+
+        # Save model once in a while
+        if iteration % 25000 == 0:
+            torch.save(model, "trained_model/current_single_model_" +  str(iteration) +  ".pth")
+
+        print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "epsilon:", epsilon, "action:",
+                action_index.cpu().detach().numpy(), "reward:", reward.numpy()[0][0], "Q max:",
+                np.max(output.cpu().detach().numpy()))
 
 
 class NeuralNetwork(nn.Module):
 
-    def __init__(self):
+    def __init__(self, n_actions):
         super(NeuralNetwork, self).__init__()
 
-        self.n_actions = 5
+        self.n_actions = n_actions
         self.gamma = 0.99
         self.fin_epsilon = 0.001
         self.init_epsilon = 0.9

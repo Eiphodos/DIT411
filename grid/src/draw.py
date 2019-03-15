@@ -10,7 +10,7 @@ class Draw:
         if (noDelay):
             self.delay = 0
         else:
-            self.delay = 0.05
+            self.delay = 0.01
 
     def initialize_window(self, grid):
         column_index  = 0
