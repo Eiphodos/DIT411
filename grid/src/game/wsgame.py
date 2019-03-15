@@ -37,7 +37,7 @@ class State:
         self.sheep_speed = sspeed
 
         # Reward a wolf gets for moving
-        self.reward_move = 1
+        self.reward_move = 0
         # Reward every wolf gets when a wolf catches a sheep
         self.reward_sheep = 100
         # Punishment for when a wolf tries to go out of bounds
@@ -62,7 +62,7 @@ class State:
         
         # If action is do nothing, just return with no reward
         if dir == 0:
-            return 0
+            return self.reward_nothing
         # Action - move west
         if dir == 1:
             # Check for out of bounds

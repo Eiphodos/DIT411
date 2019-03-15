@@ -166,6 +166,7 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
     action = torch.zeros([model.n_actions], dtype=torch.float32)
     action[0] = 1
 
+
     if cuda_available:  # put on GPU if CUDA is available
         action = action.cuda()
 
@@ -196,13 +197,14 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
         action = torch.zeros([model.n_actions], dtype=torch.float32)
         if cuda_available:  # put on GPU if CUDA is available
             action = action.cuda()
+
+        print(output)
     
         # Action #1
         action_index = torch.argmax(output)
         if cuda_available:
             action_index = action_index.cuda()    
         action[action_index] = 1
-
 
         # Update state
         grid, reward, finished = game_state.frame_step_wolf(action)
@@ -635,10 +637,6 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
 
         # do backward pass
         loss.backward()
-
-        for param in model.parameters():
-            param.grad.data.clamp_(-1, 1)
-
         optimizer.step()
 
         print("Time to update nn: ",  time.time() - time_update_nn)
@@ -691,13 +689,13 @@ class NeuralNetwork(nn.Module):
  
         self.conv1 = nn.Conv2d(1, 8, (2,2))
         self.relu1 = nn.ReLU(inplace=True)
-        self.conv2 = nn.Conv2d(8, 16, (2,2))
+        self.conv2 = nn.Conv2d(8, 32, (2,2))
         self.relu2 = nn.ReLU(inplace=True)
-        self.conv3 = nn.Conv2d(16, 16, (2,2))
+        self.conv3 = nn.Conv2d(32, 32, (2,2))
         self.relu3 = nn.ReLU(inplace=True)
-        self.fc4 = nn.Linear(64, 1)
+        self.fc4 = nn.Linear(128, 64)
         self.relu4 = nn.ReLU(inplace=True)
-        self.fc5 = nn.Linear(1, 1)
+        self.fc5 = nn.Linear(64, self.n_actions)
         
         
         #self.conv1 = nn.Conv2d(1, 8, 4, 3)
