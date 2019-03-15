@@ -70,45 +70,55 @@ class Entity:
     def inputChange(self, actions):
         # a = NeuralNetwork()
         # a.funca()
-        if (self.animal == 1):
-            self.speedChange(actions[0])
-            self.rotationChange(10 * actions[1])
+        if(actions == 0):
+            self.speedChange(1)
+        elif (actions == 1):
+            self.speedChange(-1)
+        elif (actions == 2):
+            self.rotationChange(1*10)
+        elif (actions == 3):
+            self.rotationChange(-1*10)
 
-            vision = self.game.getWolfVision(self.index)
-            vision.append(self.speed / self.maxspeed)
 
-            for i in range(vision):
-                self.game.state.append[vision[i]]
-
-
-            self.game.wolfVision.append(vision);
-
-            if (self.game.debug):
-                print("x: " + str(self.posX))
-                print("y: " + str(self.posY))
-                print("r: " + str(self.rot))
-
-            if (self.game.debug):
-                for i in range(81):
-                    value = vision[i]
-                    if (value != 0):
-                        input = "unknown"
-                        if (i < 27):
-                            input = "sheep: "
-                        elif (i < 54):
-                            input = "wolf: "
-                        else:
-                            input = "Wall: "
-                        print(input + str(vision[i]))
-
-                print("_______________________________________________")
-
-        elif (self.animal == 2):
-            self.speedChange((random.randrange(-10, 10) / 10.0))
-            self.rotationChange(random.randrange(-3600, 3600) / 10.0)
-
-            self.game.sheepPosition[0] = self.posX
-            self.game.sheepPosition[1] = self.posY
+        #if (self.animal == 1):
+        #    self.speedChange(actions[0])
+        #    self.rotationChange(10 * actions[1])
+#
+        #    vision = self.game.getWolfVision(self.index)
+        #    vision.append(self.speed / self.maxspeed)
+#
+        #    for i in range(vision):
+        #        self.game.state.append[vision[i]]
+#
+#
+        #    self.game.wolfVision.append(vision);
+#
+        #    if (self.game.debug):
+        #        print("x: " + str(self.posX))
+        #        print("y: " + str(self.posY))
+        #        print("r: " + str(self.rot))
+#
+        #    if (self.game.debug):
+        #        for i in range(81):
+        #            value = vision[i]
+        #            if (value != 0):
+        #                input = "unknown"
+        #                if (i < 27):
+        #                    input = "sheep: "
+        #                elif (i < 54):
+        #                    input = "wolf: "
+        #                else:
+        #                    input = "Wall: "
+        #                print(input + str(vision[i]))
+#
+        #        print("_______________________________________________")
+#
+        #elif (self.animal == 2):
+        #    self.speedChange((random.randrange(-10, 10) / 10.0))
+        #    self.rotationChange(random.randrange(-3600, 3600) / 10.0)
+#
+        #    self.game.sheepPosition[0] = self.posX
+        #    self.game.sheepPosition[1] = self.posY
 
     def speedChange(self, speedChange):
         if (self.speed + speedChange < 0):
@@ -188,6 +198,7 @@ class Game:
                                            self.wolfPosition)
 
         self.animals = []
+        self.wolfs = []
 
         self.animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1, self))
         self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
@@ -196,6 +207,9 @@ class Game:
 
         self.state = []
 
+        self.wolfs.append(self.animals[1])
+        self.wolfs.append(self.animals[2])
+        self.wolfs.append(self.animals[3])
 
     def gameReset(self):
         self.gen = self.gen + 1
@@ -206,6 +220,10 @@ class Game:
         self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
         self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3, self))
         self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
+        self.wolfs = []
+        self.wolfs.append(self.animals[1])
+        self.wolfs.append(self.animals[2])
+        self.wolfs.append(self.animals[3])
         self.saveFile += "\n"
 
     def controllableAgentAmount(self):
@@ -223,8 +241,16 @@ class Game:
 
 
     def conductAction(self, actionArray):
-        #for i in range(len(self.animals)):
-            #self.animals[i].inputChange(actionArray[i]);
+        #print(actionArray)
+        effectedWolf = 0
+        if(actionArray<4):
+            effectedWolf = 0
+        elif(actionArray<8):
+            effectedWolf = 1
+        else:
+            effectedWolf = 2
+
+        self.wolfs[effectedWolf].inputChange(actionArray%4)
 
 
         return self.getCurrentState(), self.getReward(), self.done(), 1

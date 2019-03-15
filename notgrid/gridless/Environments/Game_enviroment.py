@@ -22,7 +22,7 @@ class Game_enviroment(Base_Environment):
         self.next_state, self.reward, self.done, _ = self.game_environment.conductAction(action)
 
     def get_action_size(self):
-        return 2 * self.game_environment.controllableAgentAmount()
+        return 4 * self.game_environment.controllableAgentAmount()
 
     def get_state_size(self):
         return 324
