@@ -254,7 +254,7 @@ class Game:
     def getCurrentState(self):
         self.state = []
         for i in range(len(self.animals)):
-            self.state.append(self.getWolfVision(self.animals[i].index))
+            self.state += self.getWolfVision(self.animals[i].index)
         return self.state
 
     def getReward(self):
