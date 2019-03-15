@@ -28,6 +28,11 @@ class Game_enviroment(Base_Environment):
         #return 7*3*3
         return len(self.game_environment.getCurrentState())
 
+
+
+    def itsAllDone(self):
+        self.game_environment.itsAllOver()
+        print("don")
     def get_state(self):
         return self.game_environment.getCurrentState()
 
@@ -75,7 +80,7 @@ class Game_enviroment(Base_Environment):
 
 
     def get_score_to_win(self):
-        return 9995
+        return 800
 
     def get_rolling_period_to_calculate_score_over(self):
         return 10

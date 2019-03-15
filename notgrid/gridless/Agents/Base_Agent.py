@@ -68,6 +68,7 @@ class Base_Agent(object):
             if self.max_rolling_score_seen > self.average_score_required_to_win: #stop once we achieve required score
                 break
         time_taken = time.time() - self.time_start
+        self.environment.itsAllDone()
         self.summarise_results()
         if save_model:
             self.locally_save_policy()

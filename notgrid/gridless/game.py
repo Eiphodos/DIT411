@@ -44,14 +44,14 @@ class Entity:
             self.maxspeed = 2
             self.minspeed = -1
             self.animal = 1
-            self.rotationSpeed = 1.0 / 6
+            self.rotationSpeed = 10
         if animal == "Sheep":
             self.acceleration = 1
             self.deceleration = 0.5
             self.maxspeed = 2
             self.minspeed = -1
             self.animal = 2
-            self.rotationSpeed = 1.0 / 6
+            self.rotationSpeed = 10
 
     def move(self):
         rotTemp = self.rot % 360
@@ -255,24 +255,21 @@ class Game:
 
         return self.getCurrentState(), self.getReward(), self.done(), 1
 
-    def done(self):
+    def itsAllOver(self):
         endFile = ""
-
         for i in range(len(self.animals)):
-
-            #these two should be removed?
-            #self.animals[i].inputChange();
-            #self.animals[i].move();
-
+            # these two should be removed?
+            # self.animals[i].inputChange();
+            # self.animals[i].move();
             self.saveFile += self.animals[i].asString()
             endFile += self.animals[i].objectInf()
-
         endFile += "B"
         endFile += self.saveFile
 
-        #with open("Output.txt", "w") as text_file:
-        #    text_file.write(endFile)
+        with open("Output.txt", "w") as text_file:
+            text_file.write(endFile)
 
+    def done(self):
         if(self.index > 500):
             return True
         else:
