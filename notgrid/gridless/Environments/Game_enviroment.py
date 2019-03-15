@@ -80,7 +80,7 @@ class Game_enviroment(Base_Environment):
 
 
     def get_score_to_win(self):
-        return 800
+        return 1000
 
     def get_rolling_period_to_calculate_score_over(self):
         return 10

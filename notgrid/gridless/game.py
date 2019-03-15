@@ -167,6 +167,7 @@ class Entity:
 class Game:
     def __init__(self):
         self.index = 0
+        self.sheepEaten = False
         self.gen = 0
         self.saveFile = ""
         self.animals = []
@@ -215,7 +216,7 @@ class Game:
         self.gen = self.gen + 1
         self.animals = []
         self.index = 0
-
+        self.sheepEaten = False
         self.animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1, self))
         self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
         self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3, self))
@@ -238,6 +239,7 @@ class Game:
             #self.animals[i].inputChange(actionArray[i]);
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
+        self.sheepEaten = True
 
 
     def conductAction(self, actionArray):
@@ -251,7 +253,6 @@ class Game:
             effectedWolf = 2
 
         self.wolfs[effectedWolf].inputChange(actionArray%4)
-
 
         return self.getCurrentState(), self.getReward(), self.done(), 1
 
@@ -270,6 +271,15 @@ class Game:
             text_file.write(endFile)
 
     def done(self):
+        for i in range(len(self.animals)):
+            animal = self.animals[i]
+            # is wolf
+            if (animal.animal == 1):
+                xDelta = self.sheepPosition[0] - animal.posX
+                yDelta = self.sheepPosition[1] - animal.posY
+                distanceToSheep = math.sqrt(xDelta ** 2 + yDelta ** 2)
+                if (distanceToSheep < self.radius):
+                    return True
         if(self.index > 500):
             return True
         else:
