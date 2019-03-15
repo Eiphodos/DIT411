@@ -72,7 +72,7 @@ class Game_enviroment(Base_Environment):
         env.close()
 
     def get_max_steps_per_episode(self):
-        return 10000
+        return 300
 
     def get_action_types(self):
         return "CONTINUOUS"
@@ -80,7 +80,7 @@ class Game_enviroment(Base_Environment):
 
 
     def get_score_to_win(self):
-        return 1000
+        return 1250
 
     def get_rolling_period_to_calculate_score_over(self):
         return 10

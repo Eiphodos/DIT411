@@ -172,7 +172,7 @@ class Game:
         self.saveFile = ""
         self.animals = []
         self.radius = 30
-        self.sheepPosition = [240.0, 175.0]
+        self.sheepPosition = [500, 500]
         self.visionLength = 100
         self.fieldOfVision = 270
         self.nVisionLines = 7
@@ -201,7 +201,7 @@ class Game:
         self.animals = []
         self.wolfs = []
 
-        self.animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1, self))
+        self.animals.append(Entity("Sheep", 500, 500, 0, 270, 15, 10, 1, self))
         self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
         self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3, self))
         self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
@@ -217,10 +217,10 @@ class Game:
         self.animals = []
         self.index = 0
         self.sheepEaten = False
-        self.animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1, self))
+        self.animals.append(Entity("Sheep", 500, 500, 0, 270, 15, 10, 1, self))
         self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
         self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3, self))
-        self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
+        self.animals.append(Entity("Wolf", 250, 250, 0, 270, 20, 10, 4, self))
         self.wolfs = []
         self.wolfs.append(self.animals[1])
         self.wolfs.append(self.animals[2])
@@ -308,9 +308,9 @@ class Game:
                 closestSheepDistance = min(closestSheepDistance, distanceToSheep)
 
             if (closestSheepDistance < self.radius):
-                reward = 1000
+                reward = (1000-self.index)
             else:
-                reward = (1000 - closestSheepDistance)/500;
+                reward = ((1000 - closestSheepDistance)/500)/(self.index+1);
         return reward;
 
     def getWolfVision(self, wolfIndexPassed):
@@ -493,10 +493,3 @@ class Game:
         return closestDistance;
 
 
-game = Game()
-for y in range(0, 10):
-    for x in range(0, 1000):
-        pass#game.nextState()
-    game.gameReset()
-
-game.done()
