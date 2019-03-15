@@ -78,6 +78,7 @@ class Entity:
             vision.append(self.speed / self.maxspeed)
 
             for i in range(vision):
+                print("appendingToState")
                 self.game.state.append[vision[i]]
 
 
@@ -156,6 +157,8 @@ class Entity:
 
 class Game:
     def __init__(self):
+        print("initializing Game")
+
         self.index = 0
         self.gen = 0
         self.saveFile = ""
@@ -207,15 +210,27 @@ class Game:
         self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
         self.saveFile += "\n"
 
+
+        #TODO fix/change this!!!!!!!!!!!!!
+        return self.state
+
     def controllableAgentAmount(self):
         return len(self.animals) - 1
 
     def nextState(self, actionArray):
+        print("in nextState")
+
         self.state = []
         self.index = self.index + 1
         self.saveFile += "T"
+
+
+
         for i in range(len(self.animals)):
-            self.animals[i].inputChange(actionArray[i]);
+
+            actions = (actionArray[2*i], actionArray[2*i+1])
+
+            self.animals[i].inputChange(actions);
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
         return self.getCurrentState(), self.getReward(), self.done()
@@ -257,7 +272,7 @@ class Game:
                 closestSheepDistance = min(closestSheepDistance, distanceToSheep)
 
             if (closestSheepDistance < self.radius):
-                reward = 1000
+                reward = 2000
             else:
                 reward = 1000 - closestDistance;
         return reward;

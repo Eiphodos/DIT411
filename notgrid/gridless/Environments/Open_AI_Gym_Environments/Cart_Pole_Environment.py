@@ -64,7 +64,7 @@ class Cart_Pole_Environment(Base_Environment):
         return 200
 
     def get_action_types(self):
-        return "DISCRETE"
+        return "CONTINUOUS"
 
     def get_score_to_win(self):
         return 195

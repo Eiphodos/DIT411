@@ -43,6 +43,7 @@ class Game_enviroment(Base_Environment):
         self.state = self.game_environment.reset()
 
     def visualise_agent(self, agent):
+        print("visualizing agent")
 
         env = self.game_environment
 
@@ -62,13 +63,13 @@ class Game_enviroment(Base_Environment):
         env.close()
 
     def get_max_steps_per_episode(self):
-        return 10000
+        return float("inf")
 
     def get_action_types(self):
         return "CONTINUOUS"
 
     def get_score_to_win(self):
-        return 9995
+        return 1995
 
     def get_rolling_period_to_calculate_score_over(self):
         return 10

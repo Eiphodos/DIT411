@@ -5,23 +5,21 @@ from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
 from Environments.Game_enviroment import Game_enviroment
-from Environments.Open_AI_Gym_Environments.Lunar_Lander_Continuous import Lunar_Lander_Continuous
 from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
 from Utilities.Utility_Functions import run_games_for_agents
 from Agents.Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
 
 config = Config()
 config.seed = 1
-config.environment = Game_enviroment()
-#config.environment = Cart_Pole_Environment ()
-#config.environment = Lunar_Lander_Continuous()
+#config.environment = Game_enviroment()
+config.environment = Cart_Pole_Environment ()
 config.max_episodes_to_run = 1000
 config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
 config.visualise_overall_results = True
-config.runs_per_agent = 10
-config.use_GPU = False
+config.runs_per_agent = 1
+config.use_GPU = True
 
 config.hyperparameters = {
     "Policy_Gradient_Agents": {
