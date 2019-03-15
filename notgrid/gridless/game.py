@@ -200,6 +200,7 @@ class Game:
     def gameReset(self):
         self.gen = self.gen + 1
         self.animals = []
+        self.index = 0
 
         self.animals.append(Entity("Sheep", 50, 50, 0, 270, 15, 10, 1, self))
         self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
@@ -212,7 +213,7 @@ class Game:
 
     def nextState(self):
         self.state = []
-        print("Action: " + str(self.index))
+        #print("Action: " + str(self.index))
         self.index = self.index + 1
         self.saveFile += "T"
         for i in range(len(self.animals)):
