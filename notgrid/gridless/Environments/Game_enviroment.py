@@ -25,8 +25,8 @@ class Game_enviroment(Base_Environment):
         return 4 * self.game_environment.controllableAgentAmount()
 
     def get_state_size(self):
-        return 7*3*3
-        #return len(self.game_environment.getCurrentState())
+        #return 7*3*3
+        return len(self.game_environment.getCurrentState())
 
     def get_state(self):
         return self.game_environment.getCurrentState()
