@@ -215,10 +215,10 @@ class Game:
         self.index = self.index + 1
         self.saveFile += "T"
         for i in range(len(self.animals)):
-            self.animals[i].inputChange(actionArray[i]);
+            #self.animals[i].inputChange(actionArray[i]);
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
-        return self.getCurrentState(), self.getReward(), self.done()
+        return self.getCurrentState(), self.getReward(), self.done(), 1
 
     def done(self):
         endFile = ""
@@ -239,18 +239,21 @@ class Game:
             text_file.write(endFile)
 
     def getCurrentState(self):
+        self.state = []
+        for i in range(len(self.animals)):
+            self.state.append(self.getWolfVision(self.animals[i].index))
         return self.state
 
     def getReward(self):
         reward = 0
         closestSheepDistance = 100000
-        for i in range(self.animals):
+        for i in range(len(self.animals)):
             animal = self.animals[i]
 
             #is wolf
             if(animal.animal == 1):
-                xDelta = self.sheepPosition.posX - animal.posX
-                yDelta = self.sheepPosition.posY - animal.posY
+                xDelta = self.sheepPosition[0] - animal.posX
+                yDelta = self.sheepPosition[1] - animal.posY
 
                 distanceToSheep = math.sqrt(xDelta**2 +yDelta**2)
 
@@ -259,7 +262,7 @@ class Game:
             if (closestSheepDistance < self.radius):
                 reward = 1000
             else:
-                reward = 1000 - closestDistance;
+                reward = 1000 - closestSheepDistance;
         return reward;
 
     def getWolfVision(self, wolfIndexPassed):
