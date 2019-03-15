@@ -174,7 +174,7 @@ class Game:
         self.sheepPosition = [240.0, 175.0]
         self.visionLength = 100
         self.fieldOfVision = 270
-        self.nVisionLines = 27
+        self.nVisionLines = 7
         self.wolfPosition = (350, 200)
         self.wolfRotation = -30
         # set to 0 for no print 1 for print
@@ -281,7 +281,8 @@ class Game:
     def getCurrentState(self):
         self.state = []
         for i in range(len(self.animals)):
-            self.state += self.getWolfVision(self.animals[i].index)
+            if(self.animals[i].animal == 1):
+                self.state += self.getWolfVision(self.animals[i].index)
         return self.state
 
     def getReward(self):
@@ -306,7 +307,6 @@ class Game:
         return reward;
 
     def getWolfVision(self, wolfIndexPassed):
-
         wolf = self.animals[wolfIndexPassed - 1];
         currentPosition = (wolf.posX, wolf.posY)
 

@@ -27,6 +27,8 @@ class Base_Agent(object):
         self.device = "cuda:0" if config.use_GPU else "cpu"
         self.visualise_results_boolean = config.visualise_individual_results
         self.run_checks()
+        self.time_start = 0
+        self.time_end = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
     def set_random_seeds(self, seed):
@@ -58,14 +60,14 @@ class Base_Agent(object):
 
     def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
-        start = time.time()
+        self.time_start = time.time()
         while self.episode_number < num_episodes_to_run:
             self.reset_game()
             self.step()
             self.save_and_print_result()
             if self.max_rolling_score_seen > self.average_score_required_to_win: #stop once we achieve required score
                 break
-        time_taken = time.time() - start
+        time_taken = time.time() - self.time_start
         self.summarise_results()
         if save_model:
             self.locally_save_policy()
@@ -101,11 +103,14 @@ class Base_Agent(object):
                 self.max_rolling_score_seen = self.rolling_results[-1]
 
     def print_rolling_result(self):
+        timeTaken = time.time() - self.time_end
         sys.stdout.write(
-            """"\r Episode {0}, Score: {3: .2f}, Max score seen: {4: .2f},  Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}""".format(len(self.game_full_episode_scores),
+            """"\r Episode {0}, Score: {3: .2f}, Max score seen: {4: .2f},  Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}, Time: {5: .2f}s""".format(len(self.game_full_episode_scores),
                                                                                                self.rolling_results[-1],
                                                                                                self.max_rolling_score_seen,
-                                                                                               self.game_full_episode_scores[-1], self.max_episode_score_seen))
+
+                                                                                               self.game_full_episode_scores[-1], self.max_episode_score_seen, timeTaken))
+        self.time_end = time.time()
         sys.stdout.flush()
 
     def generate_string_to_print(self):
