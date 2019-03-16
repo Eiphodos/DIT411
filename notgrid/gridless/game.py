@@ -71,13 +71,13 @@ class Entity:
         # a = NeuralNetwork()
         # a.funca()
         if(actions == 0):
-            self.speedChange(1)
+            self.speedChange(0.2)
         elif (actions == 1):
-            self.speedChange(-1)
+            self.speedChange(-0.2)
         elif (actions == 2):
-            self.rotationChange(1*10)
+            self.rotationChange(1*5)
         elif (actions == 3):
-            self.rotationChange(-1*10)
+            self.rotationChange(-1*5)
 
 
         #if (self.animal == 1):
@@ -173,9 +173,9 @@ class Game:
         self.animals = []
         self.radius = 30
         self.sheepPosition = [500, 500]
-        self.visionLength = 100
-        self.fieldOfVision = 270
-        self.nVisionLines = 7
+        self.visionLength = 1000
+        self.fieldOfVision = 180
+        self.nVisionLines = 9
         self.wolfPosition = (350, 200)
         self.wolfRotation = -30
         # set to 0 for no print 1 for print
@@ -202,9 +202,9 @@ class Game:
         self.wolfs = []
 
         self.animals.append(Entity("Sheep", 500, 500, 0, 270, 15, 10, 1, self))
-        self.animals.append(Entity("Wolf", 100, 0, 0, 270, 20, 10, 2, self))
-        self.animals.append(Entity("Wolf", 0, 100, 0, 270, 20, 10, 3, self))
-        self.animals.append(Entity("Wolf", 350, 350, 0, 270, 20, 10, 4, self))
+        self.animals.append(Entity("Wolf", 450, 450, 0, 270, 20, 10, 2, self))
+        self.animals.append(Entity("Wolf", 500, 550, 0, 270, 20, 10, 3, self))
+        self.animals.append(Entity("Wolf", 550, 550, 0, 270, 20, 10, 4, self))
 
         self.state = []
 
@@ -236,7 +236,11 @@ class Game:
         self.index = self.index + 1
         self.saveFile += "T"
         for i in range(len(self.animals)):
-            #self.animals[i].inputChange(actionArray[i]);
+
+            #if(self.animals[i].animal == 2):
+            #    self.animals[0].inputChange(0)
+            #maybe
+            # self.animals[0].inputChange(2)
             self.animals[i].move();
             self.saveFile += self.animals[i].asString()
         self.sheepEaten = True
@@ -280,7 +284,7 @@ class Game:
                 distanceToSheep = math.sqrt(xDelta ** 2 + yDelta ** 2)
                 if (distanceToSheep < self.radius):
                     return True
-        if(self.index > 500):
+        if(self.index > 1000):
             return True
         else:
             return False
@@ -290,6 +294,8 @@ class Game:
         for i in range(len(self.animals)):
             if(self.animals[i].animal == 1):
                 self.state += self.getWolfVision(self.animals[i].index)
+
+        #print(self.animals[0].posX)
         return self.state
 
     def getReward(self):
@@ -308,9 +314,9 @@ class Game:
                 closestSheepDistance = min(closestSheepDistance, distanceToSheep)
 
             if (closestSheepDistance < self.radius):
-                reward = (1000-self.index)
+                reward = (1750-self.index)
             else:
-                reward = ((1000 - closestSheepDistance)/500)/(self.index+1);
+                reward = ((1000 - closestSheepDistance)/500)/10;
         return reward;
 
     def getWolfVision(self, wolfIndexPassed):
