@@ -162,16 +162,16 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
     # Instantiate game
     game_state = State(grid_size, wolf_speed, sheep_speed)
 
-    # Set initial action to 'do nothing'
-    action = torch.zeros([model.n_actions], dtype=torch.float32)
-    action[0] = 1
-
-
-    if cuda_available:  # put on GPU if CUDA is available
-        action = action.cuda()
+    action_wolf_1 = torch.zeros([4], dtype=torch.float32)
+    action_wolf_2 = torch.zeros([4], dtype=torch.float32)
+    action_wolf_3 = torch.zeros([4], dtype=torch.float32)
+    # Set initial action
+    action_wolf_1[0] = 1
+    action_wolf_2[0] = 1
+    action_wolf_3[0] = 1
 
     #Get game grid and reward
-    grid, reward, finished = game_state.frame_step_wolf(action)
+    grid, reward, finished = game_state.frame_step_single_reward(action_wolf_1, action_wolf_2, action_wolf_3)
 
     # Create drawing board and draw initial state
     window = Draw(grid_size, grid, False)
@@ -184,9 +184,6 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
         tensor_data = tensor_data.cuda()
     # Unsqueese to get the correct dimensons
     state = tensor_data.unsqueeze(0).unsqueeze(0)
-
-    # Counter to know when to move the sheep
-    sheep_counter = 1
 
     while not finished:
 
@@ -206,9 +203,10 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
             action_index = action_index.cuda()    
         action[action_index] = 1
 
+        action_wolf_1, action_wolf_2, action_wolf_3 = get_wolf_actions(action_index)
 
         # Update state
-        grid, reward, finished = game_state.frame_step_wolf(action)
+        grid, reward, finished = game_state.frame_step_single_reward(action_wolf_1, action_wolf_2, action_wolf_3)
         tensor_data_1 = torch.Tensor(grid)
         if cuda_available:
             tensor_data_1 = tensor_data_1.cuda()
@@ -217,22 +215,8 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
         #Draw new state
         window.update_window(grid)
 
-        # Move sheep every 3 "turns"
-        if sheep_counter == 3:
-            # Update state
-            grid = game_state.frame_step_sheep()
-            tensor_data_1 = torch.Tensor(grid)
-            if cuda_available:
-                tensor_data_1 = tensor_data_1.cuda()
-            state_1 = tensor_data_1.unsqueeze(0).unsqueeze(0)
-            sheep_counter = 0
-            #Draw new state
-            window.update_window(grid)
-
-        
         # set state to be state_1
         state = state_1
-        sheep_counter += 1
 
 
 def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_speed, cuda):
