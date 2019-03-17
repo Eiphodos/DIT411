@@ -39,7 +39,9 @@ class State:
         # Reward a wolf gets for moving
         self.reward_move = 0
         # Reward every wolf gets when a wolf catches a sheep
-        self.reward_sheep = 100
+        self.reward_sheep = 10
+        # Reweard multiplier to change reward over time
+        self.reward_sheep_multi = 0.99
         # Punishment for when a wolf tries to go out of bounds
         self.reward_oob = 0
         # Punishment for when a wolf tries to enter an already occupied position
@@ -61,10 +63,10 @@ class State:
 
         
         # If action is do nothing, just return with no reward
-        if dir == 0:
+        if dir == 4:
             return self.reward_nothing
         # Action - move west
-        if dir == 1:
+        if dir == 0:
             # Check for out of bounds
             if current_pos[1] - self.wolf_speed < 0:
                 return self.reward_oob
@@ -76,7 +78,7 @@ class State:
                 reward = self.reward_sheep
 
         # Action - move south
-        if dir == 2:
+        if dir == 1:
             if current_pos[0] + self.wolf_speed >= self.grid_size:
                 return self.reward_oob
             if self.grid[current_pos[0] + self.wolf_speed,current_pos[1]] in (1, 2, 3):
@@ -86,7 +88,7 @@ class State:
                 reward = self.reward_sheep
 
         # Action - move east
-        if dir == 3:
+        if dir == 2:
             if current_pos[1] + self.wolf_speed >= self.grid_size:
                 return self.reward_oob
             if self.grid[current_pos[0],current_pos[1] + self.wolf_speed] in (1, 2, 3):
@@ -97,7 +99,7 @@ class State:
 
 
         # Action - move north
-        if dir == 4:
+        if dir == 3:
             if current_pos[0] - self.wolf_speed < 0:
                 return self.reward_oob
             if self.grid[current_pos[0] - self.wolf_speed,current_pos[1]] in (1, 2, 3):
@@ -169,7 +171,7 @@ class State:
 
         # Check if the closest wolf is closer in the Y direction compared to the X direction
         if (abs(current_pos[0] - closest_wolf_pos[0]) < abs(current_pos[1] - closest_wolf_pos[1])):
-            # If it is, check if the wolf is north or south of the wolf and decide what way to flee based on that.
+            # If it is, check if the wolf is north or south of the sheep and decide what way to flee based on that.
             if (current_pos[0] < closest_wolf_pos[0]):
                 # Flee north as highest prio
                 direction_preference[0] = 4
@@ -249,10 +251,10 @@ class State:
         #Move wolves
         # Actions meanings
         # action[0] == 1 -  wolf do nothing
-        # action[1] == 1 -  wolf move north
-        # action[2] == 1 -  wolf move east
-        # action[3] == 1 -  wolf move south
-        # action[4] == 1 -  wolf move west
+        # action[1] == 1 -  wolf move west
+        # action[2] == 1 -  wolf move south
+        # action[3] == 1 -  wolf move east
+        # action[4] == 1 -  wolf move north
         tensor_action1 = tensor_action1.cpu().numpy().astype(int)
         tensor_action2 = tensor_action2.cpu().numpy().astype(int)
         tensor_action3 = tensor_action3.cpu().numpy().astype(int)
@@ -290,6 +292,8 @@ class State:
         else:
             #Move the sheep
             self.move_sheep()
+            # Update sheep reward if sheep wasnt caught
+            self.reward_sheep = self.reward_sheep * self.reward_sheep_multi
             return self.grid, reward1, reward2, reward3, False
 
     #Function used for single agent system
@@ -299,20 +303,20 @@ class State:
         #Move wolves
         # Actions meanings
         # action[0] == 1 -  wolf1 do nothing
-        # action[1] == 1 -  wolf1 move north
-        # action[2] == 1 -  wolf1 move east
-        # action[3] == 1 -  wolf1 move south
-        # action[4] == 1 -  wolf1 move west
+        # action[1] == 1 -  wolf1 move west
+        # action[2] == 1 -  wolf1 move south
+        # action[3] == 1 -  wolf1 move east
+        # action[4] == 1 -  wolf1 move north
         # action[5] == 1 -  wolf2 do nothing
-        # action[6] == 1 -  wolf2 move north
-        # action[7] == 1 -  wolf2 move east
-        # action[8] == 1 -  wolf2 move south
-        # action[9] == 1 -  wolf2 move west
+        # action[6] == 1 -  wolf2 move west
+        # action[7] == 1 -  wolf2 move south
+        # action[8] == 1 -  wolf2 move east
+        # action[9] == 1 -  wolf2 move north
         # action[10] == 1 -  wolf3 do nothing
-        # action[11] == 1 -  wolf3 move north
-        # action[12] == 1 -  wolf3 move east
-        # action[13] == 1 -  wolf3 move south
-        # action[14] == 1 -  wolf3 move west
+        # action[11] == 1 -  wolf3 move west
+        # action[12] == 1 -  wolf3 move south
+        # action[13] == 1 -  wolf3 move east
+        # action[14] == 1 -  wolf3 move north
         tensor_action = tensor_action.cpu().numpy().astype(int)
 
         if sum(tensor_action) != 1:
@@ -324,9 +328,11 @@ class State:
         for action in tensor_action:
             if action == 1:
                 reward = self.move_wolf(wolf, dir)
+                print(wolf)
+                print(dir)
             counter += 1
-            dir = counter % 5
-            wolf = counter // 5
+            dir = counter % 4
+            wolf = counter // 4
 
         if (reward == self.reward_sheep):
             #Sheep was caught so reset game state

@@ -17,14 +17,14 @@ Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'
 def main(mode):
 
     # Game definitions used for testing and training
-    grid_size = 5
+    grid_size = 7
     wolf_speed = 1
     sheep_speed = 1
 
 
     # Cuda gave in testing worse performance than running it on a high end CPU. Possibly because matrixes are not large enough for for the GPU to be better at it.
-    #cuda_available = torch.cuda.is_available()
-    cuda_available = False
+    cuda_available = torch.cuda.is_available()
+    #cuda_available = False
 
     # Testing multi agent system
     if mode == 'multi-test':
@@ -40,10 +40,10 @@ def main(mode):
 
     # Testing single agent system
     elif mode == 'single-test':
-        model = torch.load('trained_model/current_single_model_50000.pth', map_location='cpu' if not cuda_available else None).eval()
+        model = torch.load('trained_model/current_single_model_150000.pth', map_location='cpu' if not cuda_available else None).eval()
 
         if cuda_available:
-            model = model1.cuda()
+            model = model.cuda()
         test_single(model, grid_size, wolf_speed, sheep_speed, cuda_available)
 
     # Training multi agent system
@@ -71,7 +71,7 @@ def main(mode):
         if not os.path.exists('trained_model/'):
             os.mkdir('trained_model/')
 
-        model = NeuralNetwork(15)
+        model = NeuralNetwork(12)
 
         if cuda_available:
             model = model.cuda()
@@ -198,13 +198,14 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
         if cuda_available:  # put on GPU if CUDA is available
             action = action.cuda()
 
-        print(output)
+        
     
         # Action #1
         action_index = torch.argmax(output)
         if cuda_available:
             action_index = action_index.cuda()    
         action[action_index] = 1
+
 
         # Update state
         grid, reward, finished = game_state.frame_step_wolf(action)
@@ -494,7 +495,7 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
 
 def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda):
 
-    enable_graphics = False
+    enable_graphics = True
 
     # define Adam optimizer
     optimizer = optim.Adam(model.parameters(), model.learn_rate)
@@ -549,6 +550,8 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         # get output from the neural network
         output = model(state)[0]
 
+        print(output)
+
         # initialize action
         action = torch.zeros([model.n_actions], dtype=torch.float32)
         if cuda_available:  # put on GPU if CUDA is available
@@ -598,7 +601,7 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         # sample random minibatch
         minibatch = random.sample(replay_memory, min(len(replay_memory), model.minibatch_size))
 
-        # unpack minibatch 1
+        # unpack minibatch
         state_batch = torch.cat(tuple(d[0] for d in minibatch))
         action_batch = torch.cat(tuple(d[1] for d in minibatch))
         reward_batch = torch.cat(tuple(d[2] for d in minibatch))
@@ -612,6 +615,8 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
 
         # get output for the next state
         output_1_batch = model(state_1_batch)
+
+        output_1_batch.volatile = False
 
 
         # set y_j to r_j for terminal state, otherwise to r_j + gamma*max(Q)
@@ -667,7 +672,7 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         if iteration % 25000 == 0:
             torch.save(model, "trained_model/current_single_model_" +  str(iteration) +  ".pth")
 
-        print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "epsilon:", epsilon, "action:",
+        print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "time per iteration: ", (time.time() - start) / iteration, "epsilon:", epsilon, "action:",
                 action_index.cpu().detach().numpy(), "reward:", reward.numpy()[0][0], "Q max:",
                 np.max(output.cpu().detach().numpy()))
 
@@ -678,35 +683,37 @@ class NeuralNetwork(nn.Module):
         super(NeuralNetwork, self).__init__()
 
         self.n_actions = n_actions
-        self.gamma = 0.99
-        self.fin_epsilon = 0.001
-        self.init_epsilon = 0.9
-        self.iterations = 50000
+        # To incentivize early catches we use a gamma of 0.9
+        self.gamma = 0.90
+        self.fin_epsilon = 0.01
+        self.init_epsilon = 0.15
+        self.iterations = 1000000
         self.memory_size = 10000
-        self.minibatch_size = 64
-        self.epochs = 1000
-        self.learn_rate = 1e-5
+        self.minibatch_size = 32
+        self.learn_rate = 1e-6
  
-        self.conv1 = nn.Conv2d(1, 8, (2,2))
+        # Channels = 1
+        # Filters = 4
+        # Filter size = 3x3
+        # Stride = 1
+        self.conv1 = nn.Conv2d(1, 4, 3, 1)
         self.relu1 = nn.ReLU(inplace=True)
-        self.conv2 = nn.Conv2d(8, 32, (2,2))
+        # Channels = 4
+        # Filters = 8
+        # Filter size = 3x3
+        # Stride = 1
+        self.conv2 = nn.Conv2d(4, 8, 3, 1)
         self.relu2 = nn.ReLU(inplace=True)
-        self.conv3 = nn.Conv2d(32, 32, (2,2))
+        # Channels = 8
+        # Filters = 16
+        # Filter size = 3x3
+        # Stride = 1
+        self.conv3 = nn.Conv2d(8, 16, 3, 1)
         self.relu3 = nn.ReLU(inplace=True)
-        self.fc4 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(16, 8)
         self.relu4 = nn.ReLU(inplace=True)
-        self.fc5 = nn.Linear(64, self.n_actions)
+        self.fc5 = nn.Linear(8, self.n_actions)
         
-        
-        #self.conv1 = nn.Conv2d(1, 8, 4, 3)
-        #self.relu1 = nn.ReLU(inplace=True)
-        #self.conv2 = nn.Conv2d(8, 8, 1, 2)
-        #self.relu2 = nn.ReLU(inplace=True)
-        #self.conv3 = nn.Conv2d(8, 32, 1, 2)
-        #self.relu3 = nn.ReLU(inplace=True)
-        #self.fc4 = nn.Linear(32, 1)
-        #self.relu4 = nn.ReLU(inplace=True)
-        #self.fc5 = nn.Linear(1, 1)
 
     def forward(self, x):
         out = self.conv1(x)
