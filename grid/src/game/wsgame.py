@@ -39,13 +39,13 @@ class State:
         # Reward a wolf gets for moving
         self.reward_move = 0
         # Reward every wolf gets when a wolf catches a sheep
-        self.reward_sheep = 10
+        self.reward_sheep = 1000
         # Reweard multiplier to change reward over time
         self.reward_sheep_multi = 0.99
         # Punishment for when a wolf tries to go out of bounds
-        self.reward_oob = 0
+        self.reward_oob = -1
         # Punishment for when a wolf tries to enter an already occupied position
-        self.reward_ao = 0
+        self.reward_ao = -1
         # Reward a wolf gets for doing nothing
         self.reward_nothing = 0
 
@@ -124,7 +124,7 @@ class State:
         return reward
 
 
-    def move_sheep(self):
+    def move_sheep(self, movement):
 
         current_pos = self.sheep_pos
 
@@ -135,16 +135,16 @@ class State:
         east_avail = False
 
         # Testing if west is available
-        if (current_pos[1] - self.sheep_speed >= 0 and self.grid[current_pos[0], (current_pos[1] - self.sheep_speed)] == 0):
+        if (current_pos[1] - movement >= 0 and self.grid[current_pos[0], (current_pos[1] - movement)] == 0):
             west_avail = True
         # Testing if east is available
-        if (current_pos[1] + self.sheep_speed < self.grid_size and self.grid[current_pos[0], (current_pos[1] + self.sheep_speed)] == 0):
+        if (current_pos[1] + movement < self.grid_size and self.grid[current_pos[0], (current_pos[1] + movement)] == 0):
             east_avail = True
         # Testing if south is available
-        if (current_pos[0] + self.sheep_speed < self.grid_size and self.grid[(current_pos[0] + self.sheep_speed), current_pos[1] ] == 0):
+        if (current_pos[0] + movement < self.grid_size and self.grid[(current_pos[0] + movement), current_pos[1] ] == 0):
             south_avail = True
         # Testing if north is available
-        if (current_pos[0] - self.sheep_speed >= 0 and self.grid[(current_pos[0] - self.sheep_speed), current_pos[1] ] == 0):
+        if (current_pos[0] - movement >= 0 and self.grid[(current_pos[0] - movement), current_pos[1] ] == 0):
             north_avail = True
 
         if (not north_avail and not south_avail and not west_avail and not east_avail):
@@ -169,7 +169,7 @@ class State:
 
         direction_preference = [0,0,0,0]
 
-        # Check if the closest wolf is closer in the Y direction compared to the X direction
+        # Check if the closest wolf is closer in the X direction compared to the Y direction
         if (abs(current_pos[0] - closest_wolf_pos[0]) < abs(current_pos[1] - closest_wolf_pos[1])):
             # If it is, check if the wolf is north or south of the sheep and decide what way to flee based on that.
             if (current_pos[0] < closest_wolf_pos[0]):
@@ -221,16 +221,16 @@ class State:
         i = 0
         while (not successful_escape):
             if (direction_preference[i] == 1 and west_avail):
-                new_pos = (current_pos[0], current_pos[1] - self.sheep_speed)
+                new_pos = (current_pos[0], current_pos[1] - movement)
                 successful_escape = True
             elif (direction_preference[i] == 2 and south_avail):
-                new_pos = (current_pos[0] + self.sheep_speed, current_pos[1])
+                new_pos = (current_pos[0] + movement, current_pos[1])
                 successful_escape = True
             elif (direction_preference[i] == 3 and east_avail):
-                new_pos = (current_pos[0], current_pos[1] + self.sheep_speed)
+                new_pos = (current_pos[0], current_pos[1] + movement)
                 successful_escape = True
             elif (direction_preference[i] == 4 and north_avail):
-                new_pos = (current_pos[0] - self.sheep_speed, current_pos[1])
+                new_pos = (current_pos[0] - movement, current_pos[1])
                 successful_escape = True
             i += 1
 
@@ -291,10 +291,72 @@ class State:
             return old_grid, reward1, reward2, reward3, True
         else:
             #Move the sheep
-            self.move_sheep()
+            movement = self.sheep_speed
+            while (movement > 0):
+                self.move_sheep(movement)
+                movement -= 1
             # Update sheep reward if sheep wasnt caught
             self.reward_sheep = self.reward_sheep * self.reward_sheep_multi
             return self.grid, reward1, reward2, reward3, False
+
+    def frame_step_single_reward(self, tensor_action1, tensor_action2, tensor_action3):
+        reward1 = 0
+        reward2 = 0
+        reward3 = 0
+
+        #Move wolves
+        # Actions meanings
+        # action[0] == 1 -  wolf move west
+        # action[1] == 1 -  wolf move south
+        # action[2] == 1 -  wolf move east
+        # action[3] == 1 -  wolf move north
+        tensor_action1 = tensor_action1.cpu().numpy().astype(int)
+        tensor_action2 = tensor_action2.cpu().numpy().astype(int)
+        tensor_action3 = tensor_action3.cpu().numpy().astype(int)
+
+        if sum(tensor_action1) != 1 or sum(tensor_action2) != 1 or sum(tensor_action3) != 1:
+            raise ValueError('Not one action per wolf')
+
+        dir = 0
+        counter = 0
+        for action in tensor_action1:
+            if action == 1:
+                print("wolf1 dir:", dir)
+                reward1 = self.move_wolf(0, dir)
+            counter += 1
+            dir = counter % 5
+
+        dir = 0
+        counter = 0
+        for action in tensor_action2:
+            if action == 1:
+                print("wolf2 dir:", dir)
+                reward2 = self.move_wolf(1, dir)
+            counter += 1
+            dir = counter % 5
+
+        dir = 0
+        counter = 0
+        for action in tensor_action3:
+            if action == 1:
+                print("wolf3 dir:", dir)
+                reward3 = self.move_wolf(2, dir)
+            counter += 1
+            dir = counter % 5
+
+        if (reward1 == self.reward_sheep or reward2 == self.reward_sheep or reward3 == self.reward_sheep ):
+            #Sheep was caught so send sheep reward and reset game state
+            old_grid = self.grid
+            self.__init__(self.grid_size, self.wolf_speed, self.sheep_speed)
+            return old_grid, self.reward_sheep, True
+        else:
+            #Move the sheep
+            movement = self.sheep_speed
+            while (movement > 0):
+                self.move_sheep(movement)
+                movement -= 1
+            # Update sheep reward if sheep wasnt caught
+            return self.grid, (reward1 + reward2 + reward3), False
 
     #Function used for single agent system
     def frame_step_wolf(self, tensor_action):
@@ -344,5 +406,8 @@ class State:
 
     # Function used for single agent system
     def frame_step_sheep(self):
-        self.move_sheep()
+        movement = self.sheep_speed
+        while (movement > 0):
+            self.move_sheep(movement)
+            movement -= 1
         return self.grid

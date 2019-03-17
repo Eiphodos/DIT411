@@ -23,8 +23,8 @@ def main(mode):
 
 
     # Cuda gave in testing worse performance than running it on a high end CPU. Possibly because matrixes are not large enough for for the GPU to be better at it.
-    cuda_available = torch.cuda.is_available()
-    #cuda_available = False
+    #cuda_available = torch.cuda.is_available()
+    cuda_available = False
 
     # Testing multi agent system
     if mode == 'multi-test':
@@ -71,7 +71,7 @@ def main(mode):
         if not os.path.exists('trained_model/'):
             os.mkdir('trained_model/')
 
-        model = NeuralNetwork(12)
+        model = NeuralNetwork(64)
 
         if cuda_available:
             model = model.cuda()
@@ -515,12 +515,16 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
      # instantiate game
     game_state = State(grid_size, wolf_speed, sheep_speed)
 
-    action = torch.zeros([model.n_actions], dtype=torch.float32)
-    # Set initial action to 'do nothing'
-    action[0] = 1
+    action_wolf_1 = torch.zeros([4], dtype=torch.float32)
+    action_wolf_2 = torch.zeros([4], dtype=torch.float32)
+    action_wolf_3 = torch.zeros([4], dtype=torch.float32)
+    # Set initial action
+    action_wolf_1[0] = 1
+    action_wolf_2[0] = 1
+    action_wolf_3[0] = 1
 
     #Get game grid and reward
-    grid, reward, finished = game_state.frame_step_wolf(action)
+    grid, reward, finished = game_state.frame_step_single_reward(action_wolf_1, action_wolf_2, action_wolf_3)
 
     #Convert to tensor
     tensor_data = torch.Tensor(grid)
@@ -541,17 +545,12 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         window = Draw(grid_size, grid, True)
         window.update_window(grid)
 
-    # Counter to know when to move the sheep
-    sheep_counter = 1
-
     while iteration < model.iterations:
         time_get_actions = time.time()
 
         # get output from the neural network
         output = model(state)[0]
-
-        print(output)
-
+ 
         # initialize action
         action = torch.zeros([model.n_actions], dtype=torch.float32)
         if cuda_available:  # put on GPU if CUDA is available
@@ -567,12 +566,14 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
 
         action[action_index] = 1
 
+        action_wolf_1, action_wolf_2, action_wolf_3 = get_wolf_actions(action_index)
+
         print("Time to calculate actions: ",  time.time() - time_get_actions)
 
         time_move_state = time.time()
 
         #Get game grid and reward
-        grid, reward, finished = game_state.frame_step_wolf(action)
+        grid, reward, finished = game_state.frame_step_single_reward(action_wolf_1, action_wolf_2, action_wolf_3)
         tensor_data_1 = torch.Tensor(grid)
         if cuda_available:
             tensor_data_1 = tensor_data_1.cuda()
@@ -646,24 +647,11 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
 
         print("Time to update nn: ",  time.time() - time_update_nn)
 
-        # Move sheep every 3 "turns"
-        if sheep_counter == 3:
-            # Update state
-            grid = game_state.frame_step_sheep()
-            tensor_data_1 = torch.Tensor(grid)
-            if cuda_available:
-                tensor_data_1 = tensor_data_1.cuda()
-            state_1 = tensor_data_1.unsqueeze(0).unsqueeze(0)
-            sheep_counter = 0
-            if enable_graphics:
-                window.update_window(grid)
-
         # set state to be state_1
         state = state_1
 
         # Update counters
         iteration += 1
-        sheep_counter += 1
         if (finished):
             catches += 1
             avg_steps_per_catch = iteration / catches
@@ -675,6 +663,23 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "time per iteration: ", (time.time() - start) / iteration, "epsilon:", epsilon, "action:",
                 action_index.cpu().detach().numpy(), "reward:", reward.numpy()[0][0], "Q max:",
                 np.max(output.cpu().detach().numpy()))
+
+def get_wolf_actions(action_index):
+
+    action_wolf_1 = torch.zeros([4], dtype=torch.float32)
+    action_wolf_2 = torch.zeros([4], dtype=torch.float32)
+    action_wolf_3 = torch.zeros([4], dtype=torch.float32)
+
+    index = action_index.cpu().numpy().astype(int)
+    wolf_1_index = index // 16
+    wolf_2_index = ( index // 4 ) % 4
+    wolf_3_index = index % 4 
+
+    action_wolf_1[wolf_1_index] = 1
+    action_wolf_2[wolf_2_index] = 1
+    action_wolf_3[wolf_3_index] = 1
+
+    return action_wolf_1, action_wolf_2, action_wolf_3
 
 
 class NeuralNetwork(nn.Module):
@@ -691,7 +696,7 @@ class NeuralNetwork(nn.Module):
         self.memory_size = 10000
         self.minibatch_size = 32
         self.learn_rate = 1e-6
- 
+
         # Channels = 1
         # Filters = 4
         # Filter size = 3x3
@@ -735,3 +740,69 @@ def init_weights(m):
 
 if __name__ == "__main__":
     main(sys.argv[1])
+
+        # wolf 123 directions
+        # 0 - WWW
+        # 1 - WWS
+        # 2 - WWE
+        # 3 - WWN
+        # 4 - WSW
+        # 5 - WSS
+        # 6 - WSE
+        # 7 - WSN
+        # 8 - WEW
+        # 9 - WES
+        # 10 - WEE
+        # 11 - WEN
+        # 12 - WNW
+        # 13 - WNS
+        # 14 - WNE
+        # 15 - WNN
+        # 16 - SWW
+        # 17 - SWS
+        # 18 - SWE
+        # 19 - SWN
+        # 20 - SSW
+        # 21 - SSS
+        # 22 - SSE
+        # 23 - SSN
+        # 24 - SEW
+        # 25 - SES
+        # 26 - SEE
+        # 27 - SEN
+        # 28 - SNW
+        # 29 - SNS
+        # 30 - SNE
+        # 31 - SNN
+        # 32 - EWW
+        # 33 - EWS
+        # 34 - EWE
+        # 35 - EWN
+        # 36 - ESW
+        # 37 - ESS
+        # 38 - ESE
+        # 39 - ESN
+        # 40 - EEW
+        # 41 - EES
+        # 42 - EEE
+        # 43 - EEN
+        # 44 - ENW
+        # 45 - ENS
+        # 46 - ENE
+        # 47 - ENN
+        # 48 - NWW
+        # 49 - NWS
+        # 50 - NWE
+        # 51 - NWN
+        # 52 - NSW
+        # 53 - NSS
+        # 54 - NSE
+        # 55 - NSN
+        # 56 - NEW
+        # 57 - NES
+        # 58 - NEE
+        # 59 - NEN
+        # 60 - NNW
+        # 61 - NNS
+        # 62 - NNE
+        # 63 - NNN
