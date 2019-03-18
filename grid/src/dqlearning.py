@@ -51,9 +51,9 @@ def main(mode):
         if not os.path.exists('trained_model/'):
             os.mkdir('trained_model/')
 
-        model1 = NeuralNetwork(5)
-        model2 = NeuralNetwork(5)
-        model3 = NeuralNetwork(5)
+        model1 = NeuralNetwork(4)
+        model2 = NeuralNetwork(4)
+        model3 = NeuralNetwork(4)
 
         if cuda_available:
             model1 = model1.cuda()
@@ -83,13 +83,15 @@ def main(mode):
 
 def test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda):
 
+    games_to_test = 10
+
     # Set cuda
     cuda_available = cuda
 
     # Instantiate game
     game_state = State(grid_size, wolf_speed, sheep_speed)
 
-    # Set initial action to 'do nothing' for all three wolves
+    # Set initial action for all three wolves
     action1 = torch.zeros([model1.n_actions], dtype=torch.float32)
     action2 = torch.zeros([model2.n_actions], dtype=torch.float32)
     action3 = torch.zeros([model3.n_actions], dtype=torch.float32)
@@ -112,7 +114,7 @@ def test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda)
     # Unsqueese to get the correct dimensons
     state = tensor_data.unsqueeze(0).unsqueeze(0)
 
-    while not finished:
+    while games < games_to_test:
 
         # get output from the neural network
         output1 = model1(state)[0]
@@ -154,7 +156,12 @@ def test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda)
         # set state to be state_1
         state = state_1
 
+        if finished:
+            games += 1
+
 def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
+
+    games_to_test = 10
 
     # Set cuda
     cuda_available = cuda
@@ -185,7 +192,9 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
     # Unsqueese to get the correct dimensons
     state = tensor_data.unsqueeze(0).unsqueeze(0)
 
-    while not finished:
+    games = 0
+
+    while games < games_to_test:
 
         # get output from the neural network for moving a wolf
         output = model(state)[0]
@@ -217,9 +226,14 @@ def test_single(model, grid_size, wolf_speed, sheep_speed, cuda):
 
         # set state to be state_1
         state = state_1
+        if finished:
+            games += 1
 
 
 def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_speed, cuda):
+
+    # Save Q-values for plotting
+    q_history = []
 
     # define Adam optimizer
     optimizer1 = optim.Adam(model1.parameters(), model1.learn_rate)
@@ -250,7 +264,7 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
     action1 = torch.zeros([model1.n_actions], dtype=torch.float32)
     action2 = torch.zeros([model2.n_actions], dtype=torch.float32)
     action3 = torch.zeros([model3.n_actions], dtype=torch.float32)
-    # Set initial action to 'do nothing' for all three wolves
+    # Set initial action for all three wolves
     action1[0] = 1
     action2[0] = 1
     action3[0] = 1
@@ -263,10 +277,10 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
 
     if cuda_available:
         tensor_data = tensor_data.cuda()
-    # Concatenate four last grids
+    # Increase dimension on grid to fit shape for conv2d
     state = tensor_data.unsqueeze(0).unsqueeze(0)
 
-    # Initialize iterion counter for this epoch
+    # Initialize iteration counter
     iteration = 0
     catches = 0
     avg_steps_per_catch = 0
@@ -277,6 +291,7 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
         window = Draw(grid_size, grid, True)
         window.update_window(grid)
 
+    # All models have the same number of iterations so does not matter which one we are checking
     while iteration < model1.iterations:
         time_get_actions = time.time()
 
@@ -449,13 +464,6 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
         loss2.backward()
         loss3.backward()
 
-        for param in model1.parameters():
-            param.grad.data.clamp_(-1, 1)
-        for param in model2.parameters():
-            param.grad.data.clamp_(-1, 1)
-        for param in model3.parameters():
-            param.grad.data.clamp_(-1, 1)
-
         optimizer1.step()
         optimizer2.step()
         optimizer3.step()
@@ -472,12 +480,23 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
             torch.save(model1, "trained_model/current_multi_model1_" +  str(iteration) +  ".pth")
             torch.save(model2, "trained_model/current_multi_model2_" +  str(iteration) +  ".pth")
             torch.save(model3, "trained_model/current_multi_model3_" +  str(iteration) +  ".pth")
+        
+        q_max = np.max(output1.cpu().detach().numpy())
+        q_history.append(q_max) 
+
 
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "epsilon:", epsilon1, "action:",
                 action_index_1.cpu().detach().numpy(), "reward:", reward1.numpy()[0][0], "Q max:",
-                np.max(output1.cpu().detach().numpy()))
+                q_max)
+
+    f = open ("q_history_multi.txt", "w+")
+    for i in range(len(q_history)):
+        f.write("%d\n" % q_history[i])
 
 def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda):
+
+    # Save Q-values for plotting
+    q_history = []
 
     enable_graphics = True
 
@@ -518,7 +537,7 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
     # Concatenate four last grids
     state = tensor_data.unsqueeze(0).unsqueeze(0)
 
-    # Initialize iterion counter for this epoch
+    # Initialize iteration counter
     iteration = 0
     catches = 0
     avg_steps_per_catch = 0
@@ -644,9 +663,16 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         if iteration % 25000 == 0:
             torch.save(model, "trained_model/current_single_model_" +  str(iteration) +  ".pth")
 
+        q_max = np.max(output.cpu().detach().numpy())
+        q_history.append(q_max) 
+
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "time per iteration: ", (time.time() - start) / iteration, "epsilon:", epsilon, "action:",
                 action_index.cpu().detach().numpy(), "reward:", reward.numpy()[0][0], "Q max:",
-                np.max(output.cpu().detach().numpy()))
+                q_max)
+
+    f = open ("q_history.txt", "w+")
+    for i in range(len(q_history)):
+        f.write("%d\n" % q_history[i])
 
 def get_wolf_actions(action_index):
 
@@ -673,13 +699,13 @@ class NeuralNetwork(nn.Module):
 
         self.n_actions = n_actions
         # To incentivize early catches we use a gamma of 0.9
-        self.gamma = 0.90
+        self.gamma = 0.95
         self.fin_epsilon = 0.01
         self.init_epsilon = 0.15
         self.iterations = 1000000
         self.memory_size = 10000
         self.minibatch_size = 32
-        self.learn_rate = 1e-6
+        self.learn_rate = 1e-3
 
         # Channels = 1
         # Filters = 4
