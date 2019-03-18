@@ -42,6 +42,8 @@ class State:
         self.reward_sheep = 100
         # Reweard multiplier to change reward over time
         self.reward_sheep_multi = 0.99
+        # Minimum reward for sheep
+        self.reward_sheep_min = 10
         # Punishment for when a wolf tries to go out of bounds
         self.reward_oob = 0
         # Punishment for when a wolf tries to enter an already occupied position
@@ -50,7 +52,7 @@ class State:
         self.reward_nothing = 0
 
         # Percentage of time that the sheep panics
-        self.sheep_panic = 0.2
+        self.sheep_panic = 0.05
 
 
     def move_wolf(self, wolf, dir):
@@ -357,7 +359,6 @@ class State:
         counter = 0
         for action in tensor_action1:
             if action == 1:
-                print("wolf1 dir:", dir)
                 reward1 = self.move_wolf(0, dir)
             counter += 1
             dir = counter % 5
@@ -366,7 +367,6 @@ class State:
         counter = 0
         for action in tensor_action2:
             if action == 1:
-                print("wolf2 dir:", dir)
                 reward2 = self.move_wolf(1, dir)
             counter += 1
             dir = counter % 5
@@ -375,7 +375,6 @@ class State:
         counter = 0
         for action in tensor_action3:
             if action == 1:
-                print("wolf3 dir:", dir)
                 reward3 = self.move_wolf(2, dir)
             counter += 1
             dir = counter % 5
@@ -391,10 +390,11 @@ class State:
             #Move the sheep
             movement = self.sheep_speed
             while (movement > 0):
+                print("sheep pos:", self.sheep_pos)
                 self.move_sheep(movement)
                 movement -= 1
             # Update sheep reward if sheep wasnt caught
-            self.reward_sheep = self.reward_sheep * self.reward_sheep_multi
+            self.reward_sheep = max(self.reward_sheep_min, self.reward_sheep * self.reward_sheep_multi)
             return self.grid, reward1, reward2, reward3, False
 
     def frame_step_single_reward(self, tensor_action1, tensor_action2, tensor_action3):
@@ -419,7 +419,6 @@ class State:
         counter = 0
         for action in tensor_action1:
             if action == 1:
-                print("wolf1 dir:", dir)
                 reward1 = self.move_wolf(0, dir)
             counter += 1
             dir = counter % 5
@@ -428,16 +427,15 @@ class State:
         counter = 0
         for action in tensor_action2:
             if action == 1:
-                print("wolf2 dir:", dir)
                 reward2 = self.move_wolf(1, dir)
             counter += 1
             dir = counter % 5
 
         dir = 0
         counter = 0
+
         for action in tensor_action3:
             if action == 1:
-                print("wolf3 dir:", dir)
                 reward3 = self.move_wolf(2, dir)
             counter += 1
             dir = counter % 5
@@ -454,5 +452,5 @@ class State:
                 self.move_sheep(movement)
                 movement -= 1
             # Update sheep reward if sheep wasnt caught
-            self.reward_sheep = self.reward_sheep * self.reward_sheep_multi
+            self.reward_sheep = max(self.reward_sheep_min, self.reward_sheep * self.reward_sheep_multi)
             return self.grid, (reward1 + reward2 + reward3), False

@@ -10,11 +10,23 @@ import numpy as np
 from game.wsgame import State
 from draw import Draw
 from collections import namedtuple
+import argparse
+
+from matplotlib import pyplot as plt
+plt.style.use('bmh')
 
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
 
-def main(mode):
+def main(args):
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-mode', choices=['multi-test', 'single-test', 'multi-train', 'single-train'], help="Select a mode from either multi-test, single-test, multi-train, single-train")
+    parser.add_argument('--iteration', help='Iteration number for the model you want to test, for example: 75000')
+
+    args = parser.parse_args()
+         
 
     # Game definitions used for testing and training
     grid_size = 7
@@ -22,32 +34,41 @@ def main(mode):
     sheep_speed = 1
 
 
-    # Cuda gave in testing worse performance than running it on a high end CPU. Possibly because matrixes are not large enough for for the GPU to be better at it.
-    cuda_available = torch.cuda.is_available()
-    #cuda_available = False
+    # Cuda was slower than running on a high end CPU. Possibly because matrixes are not large enough for for the GPU to be better at it.
+    #cuda_available = torch.cuda.is_available()
+    cuda_available = False
 
     # Testing multi agent system
-    if mode == 'multi-test':
-        model1 = torch.load('trained_model/current_multi_model1_50000.pth', map_location='cpu' if not cuda_available else None).eval()
-        model2 = torch.load('trained_model/current_multi_model2_50000.pth', map_location='cpu' if not cuda_available else None).eval()
-        model3 = torch.load('trained_model/current_multi_model3_50000.pth', map_location='cpu' if not cuda_available else None).eval()
+    if args.mode == 'multi-test':
+        if args.iteration:
+            model1_str = 'trained_model/current_multi_model1_' + args.iteration + '.pth'
+            model2_str = 'trained_model/current_multi_model2_' + args.iteration + '.pth'
+            model3_str = 'trained_model/current_multi_model3_' + args.iteration + '.pth'
 
-        if cuda_available:
-            model1 = model1.cuda()
-            model2 = model2.cuda()
-            model3 = model3.cuda()
-        test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda_available)
+            model1 = torch.load(model1_str, map_location='cpu' if not cuda_available else None).eval()
+            model2 = torch.load(model2_str, map_location='cpu' if not cuda_available else None).eval()
+            model3 = torch.load(model3_str, map_location='cpu' if not cuda_available else None).eval()
 
+            if cuda_available:
+                model1 = model1.cuda()
+                model2 = model2.cuda()
+                model3 = model3.cuda()
+            test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda_available)
+        else:
+            raise ValueError('You need to supply an iteration number to test. Try -mode multi-test --iteration number')
     # Testing single agent system
-    elif mode == 'single-test':
-        model = torch.load('trained_model/current_single_model_150000.pth', map_location='cpu' if not cuda_available else None).eval()
+    elif args.mode == 'single-test':
+        if args.iteration:
+            model_str = 'trained_model/current_single_model_' + args.iteration + '.pth'
+            model = torch.load(model_str, map_location='cpu' if not cuda_available else None).eval()
 
-        if cuda_available:
-            model = model.cuda()
-        test_single(model, grid_size, wolf_speed, sheep_speed, cuda_available)
-
+            if cuda_available:
+                model = model.cuda()
+            test_single(model, grid_size, wolf_speed, sheep_speed, cuda_available)
+        else:
+            raise ValueError('You need to supply an iteration number to test. Try -mode single-test --iteration number')
     # Training multi agent system
-    elif mode == 'multi-train':
+    elif args.mode == 'multi-train':
         if not os.path.exists('trained_model/'):
             os.mkdir('trained_model/')
 
@@ -67,7 +88,7 @@ def main(mode):
         train_networks(model1, model2, model3 , start, grid_size, wolf_speed, sheep_speed, cuda_available)
 
     # Training single agent system
-    elif mode == 'single-train':
+    elif args.mode == 'single-train':
         if not os.path.exists('trained_model/'):
             os.mkdir('trained_model/')
 
@@ -425,7 +446,7 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
         output_1_batch2 = model2(state_1_batch2)
         output_1_batch3 = model3(state_1_batch3)
 
-        # set y_j to r_j for terminal state, otherwise to r_j + gamma*max(Q)
+        # set y_j to r_j for finished state, otherwise to r_j + gamma*max(Q)
         y_batch_1 = torch.cat(tuple(reward_batch1[i] if minibatch1[i][4]
                             else reward_batch1[i] + model1.gamma * torch.max(output_1_batch1[i])
                             for i in range(len(minibatch1))))
@@ -447,7 +468,7 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
 
 
 
-        # returns a new Tensor, detached from the current graph, the result will never require gradient
+        # A new tensor detached from the current graph
         y_batch_1 = y_batch_1.detach()
         y_batch_2 = y_batch_2.detach()
         y_batch_3 = y_batch_3.detach()
@@ -457,7 +478,7 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
         loss2 = criterion(q_value_2, y_batch_2)
         loss3 = criterion(q_value_3, y_batch_3)
 
-        # PyTorch accumulates gradients by default, so they need to be reset in each pass
+        # We reset gradients each pass
         optimizer1.zero_grad()
         optimizer2.zero_grad()
         optimizer3.zero_grad()
@@ -479,11 +500,13 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
             catches += 1
             avg_steps_per_catch = iteration / catches
 
+        # Save model every now and then
         if iteration % 25000 == 0:
             torch.save(model1, "trained_model/current_multi_model1_" +  str(iteration) +  ".pth")
             torch.save(model2, "trained_model/current_multi_model2_" +  str(iteration) +  ".pth")
             torch.save(model3, "trained_model/current_multi_model3_" +  str(iteration) +  ".pth")
         
+        # Save Q-max
         q_max = np.max(output1.cpu().detach().numpy())
         q_history.append(q_max) 
         f.write("%f\n" % q_max)
@@ -491,6 +514,8 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "epsilon:", epsilon1, "action:",
                 action_index_1.cpu().detach().numpy(), "reward:", reward1.numpy()[0][0], "Q max:",
                 q_max)
+    plt.plot(q_history)
+    plt.show()
 
 
 
@@ -536,7 +561,7 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
 
     if cuda_available:
         tensor_data = tensor_data.cuda()
-    # Concatenate four last grids
+    # Increase dimensions of game grid to fit Conv2d
     state = tensor_data.unsqueeze(0).unsqueeze(0)
 
     # Initialize iteration counter
@@ -637,13 +662,13 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
 
         time_update_nn = time.time()
 
-        # returns a new Tensor, detached from the current graph, the result will never require gradient
+        # A new Tensor, detached from the current graph
         y_batch = y_batch.detach()
 
         # calculate loss
         loss = criterion(q_value, y_batch)
 
-        # PyTorch accumulates gradients by default, so they need to be reset in each pass
+        # Reset gradients
         optimizer.zero_grad()
 
         # do backward pass
@@ -665,6 +690,7 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         if iteration % 25000 == 0:
             torch.save(model, "trained_model/current_single_model_" +  str(iteration) +  ".pth")
 
+        # Save Q-max 
         q_max = np.max(output.cpu().detach().numpy())
         q_history.append(q_max) 
         f.write("%f\n" % q_max)
@@ -672,6 +698,8 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "time per iteration: ", (time.time() - start) / iteration, "epsilon:", epsilon, "action:",
                 action_index.cpu().detach().numpy(), "reward:", reward.numpy()[0][0], "Q max:",
                 q_max)
+    plt.plot(q_history)
+    plt.show()
 
    
         
@@ -683,6 +711,7 @@ def get_wolf_actions(action_index):
     action_wolf_3 = torch.zeros([4], dtype=torch.float32)
 
     index = action_index.cpu().numpy().astype(int)
+    # See lookup table at the end of this file for the basis to these calculations
     wolf_1_index = index // 16
     wolf_2_index = ( index // 4 ) % 4
     wolf_3_index = index % 4 
@@ -700,11 +729,11 @@ class NeuralNetwork(nn.Module):
         super(NeuralNetwork, self).__init__()
 
         self.n_actions = n_actions
-        # To incentivize early catches we use a gamma of 0.9
-        self.gamma = 0.95
-        self.fin_epsilon = 0.01
+        # To incentivize early catches we have tried gamma between 0.9 and 0.99
+        self.gamma = 0.99
+        self.fin_epsilon = 0.001
         self.init_epsilon = 0.15
-        self.iterations = 1000000
+        self.iterations = 500000
         self.memory_size = 10000
         self.minibatch_size = 32
         self.learn_rate = 1e-3
@@ -753,7 +782,14 @@ def init_weights(m):
 if __name__ == "__main__":
     main(sys.argv[1])
 
-        # wolf 123 directions
+
+
+
+
+# The action space for the single agent system
+# As an example, if action_index = 24
+# Then wolf_1 should move south, wolf_2 should move east and wolf_3 should move west.
+        # wolf directions
         # 0 - WWW
         # 1 - WWS
         # 2 - WWE
