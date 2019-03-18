@@ -23,8 +23,8 @@ def main(mode):
 
 
     # Cuda gave in testing worse performance than running it on a high end CPU. Possibly because matrixes are not large enough for for the GPU to be better at it.
-    #cuda_available = torch.cuda.is_available()
-    cuda_available = False
+    cuda_available = torch.cuda.is_available()
+    #cuda_available = False
 
     # Testing multi agent system
     if mode == 'multi-test':
@@ -236,6 +236,7 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
 
     # Save Q-values for plotting
     q_history = []
+    f = open ("q_history_multi.txt", "w+")
 
     # define Adam optimizer
     optimizer1 = optim.Adam(model1.parameters(), model1.learn_rate)
@@ -485,20 +486,19 @@ def train_networks(model1, model2, model3, start, grid_size, wolf_speed, sheep_s
         
         q_max = np.max(output1.cpu().detach().numpy())
         q_history.append(q_max) 
-
+        f.write("%f\n" % q_max)
 
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "epsilon:", epsilon1, "action:",
                 action_index_1.cpu().detach().numpy(), "reward:", reward1.numpy()[0][0], "Q max:",
                 q_max)
 
-    f = open ("q_history_multi.txt", "w+")
-    for i in range(len(q_history)):
-        f.write("%d\n" % q_history[i])
+
 
 def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda):
 
     # Save Q-values for plotting
     q_history = []
+    f = open ("q_history.txt", "w+")
 
     enable_graphics = True
 
@@ -667,14 +667,14 @@ def train_single_network(model, start, grid_size, wolf_speed, sheep_speed, cuda)
 
         q_max = np.max(output.cpu().detach().numpy())
         q_history.append(q_max) 
+        f.write("%f\n" % q_max)
 
         print("iteration:", iteration, "avg steps per catch: ", avg_steps_per_catch, "elapsed time:", time.time() - start, "time per iteration: ", (time.time() - start) / iteration, "epsilon:", epsilon, "action:",
                 action_index.cpu().detach().numpy(), "reward:", reward.numpy()[0][0], "Q max:",
                 q_max)
 
-    f = open ("q_history.txt", "w+")
-    for i in range(len(q_history)):
-        f.write("%d\n" % q_history[i])
+   
+        
 
 def get_wolf_actions(action_index):
 
