@@ -114,6 +114,8 @@ def test_multi(model1, model2, model3, grid_size, wolf_speed, sheep_speed, cuda)
     # Unsqueese to get the correct dimensons
     state = tensor_data.unsqueeze(0).unsqueeze(0)
 
+    games = 0
+
     while games < games_to_test:
 
         # get output from the neural network

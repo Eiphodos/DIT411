@@ -172,49 +172,132 @@ class State:
         # Check if the closest wolf is closer in the X direction compared to the Y direction
         if (abs(current_pos[0] - closest_wolf_pos[0]) < abs(current_pos[1] - closest_wolf_pos[1])):
             # If it is, check if the wolf is north or south of the sheep and decide what way to flee based on that.
+            
+            #If wolf is north of sheep
             if (current_pos[0] < closest_wolf_pos[0]):
-                # Flee north as highest prio
-                direction_preference[0] = 4
-                # Flee south as lowest prio
-                direction_preference[3] = 2
+                # If wolf is east of sheep
+                if (current_pos[1] < closest_wolf_pos[1]):
+                    # Flee north as highest prio
+                    direction_preference[0] = 4
+                    # Flee west as second highest prio
+                    direction_preference[1] = 1
+                    # Flee east as second to last prio
+                    direction_preference[2] = 3
+                    # Flee south as lowest prio
+                    direction_preference[3] = 2
+                # if wolf is west of sheep
+                else:
+                    # Flee north as highest prio
+                    direction_preference[0] = 4
+                    # Flee east as second highest prio
+                    direction_preference[1] = 3
+                    # Flee west as second to last prio
+                    direction_preference[2] = 1
+                    # Flee south as lowest prio
+                    direction_preference[3] = 2
+            # If wolf is south of sheep
+            elif (current_pos[0] > closest_wolf_pos[0]):
+                # If wolf is east of sheep
+                if (current_pos[1] < closest_wolf_pos[1]):
+                    # Flee south as highest prio
+                    direction_preference[0] = 2
+                    # Flee west as second highest prio
+                    direction_preference[1] = 1
+                    # Flee east as second to last prio
+                    direction_preference[2] = 3
+                    # Flee north as lowest prio
+                    direction_preference[3] = 4
+                # if wolf is west of sheep
+                else:
+                    # Flee south as highest prio
+                    direction_preference[0] = 2
+                    # Flee east as second highest prio
+                    direction_preference[1] = 3
+                    # Flee west as second to last prio
+                    direction_preference[2] = 1
+                    # Flee north as lowest prio
+                    direction_preference[3] = 4
+            # If they are equal, running towards the wolf must be lowest prio
             else:
-                # Flee south as highest prio
-                direction_preference[0] = 2
-                # Flee north as lowest prio
-                direction_preference[3] = 4
-            if (current_pos[1] < closest_wolf_pos[1]):
-                # Flee west as second highest prio
-                direction_preference[1] = 1
-                # Flee east as second to last prio
-                direction_preference[2] = 3
-            else:
-                # Flee east as second highest prio
-                direction_preference[1] = 3
-                # Flee west as second to last prio
-                direction_preference[2] = 1
+                # If wolf is east of sheep
+                if (current_pos[1] < closest_wolf_pos[1]):
+                    # Flee west as highest prio
+                    direction_preference[0] = 1
+                    # Flee south as second highest prio
+                    direction_preference[1] = 2
+                    # Flee north as second to last prio
+                    direction_preference[2] = 4
+                    # Flee east as last prio
+                    direction_preference[3] = 3
+                # if wolf is west of sheep
+                else:
+                    # Flee east as highest prio
+                    direction_preference[0] = 3
+                    # Flee north as second highest prio
+                    direction_preference[1] = 4
+                    # Flee south as second to last prio
+                    direction_preference[2] = 2
+                    # Flee west as last prio
+                    direction_preference[3] = 1
         else:
-        # Else if wolf is closer in the X direction we update the priority list based on that instead
+        # Else if wolf is closer or equal in the X direction we update the priority list based on that instead
             if (current_pos[1] < closest_wolf_pos[1]):
-                # Flee west as highest prio
-                direction_preference[0] = 1
-                # Flee east as last prio
-                direction_preference[3] = 3
+                if (current_pos[0] < closest_wolf_pos[0]):
+                    # Flee west as highest prio
+                    direction_preference[0] = 1
+                    # Flee north as second highest prio
+                    direction_preference[1] = 4
+                    # Flee south as second to last prio
+                    direction_preference[2] = 2
+                    # Flee east as last prio
+                    direction_preference[3] = 3
+                else:
+                    # Flee west as highest prio
+                    direction_preference[0] = 1
+                    # Flee south as second highest prio
+                    direction_preference[1] = 2
+                    # Flee north as second to last prio
+                    direction_preference[2] = 4
+                    # Flee east as last prio
+                    direction_preference[3] = 3
+            elif (current_pos[1] > closest_wolf_pos[1]):
+                if (current_pos[0] < closest_wolf_pos[0]):
+                    # Flee east as highest prio
+                    direction_preference[0] = 3
+                    # Flee north as second highest prio
+                    direction_preference[1] = 4
+                    # Flee south as second to last prio
+                    direction_preference[2] = 2
+                    # Flee west as last prio
+                    direction_preference[3] = 1
+                else:
+                    # Flee east as highest prio
+                    direction_preference[0] = 3
+                    # Flee south as second highest prio
+                    direction_preference[1] = 2
+                    # Flee north as second to last prio
+                    direction_preference[2] = 4
+                    # Flee west as last prio
+                    direction_preference[3] = 1
             else:
-                # Flee east as highest prio
-                direction_preference[0] = 3
-                # Flee west as second to last prio
-                direction_preference[3] = 1
-            if (current_pos[0] < closest_wolf_pos[0]):
-                # Flee north as second highest prio
-                direction_preference[1] = 4
-                # Flee south as second to last prio
-                direction_preference[2] = 2
-            else:
-                # Flee south as second highest prio
-                direction_preference[1] = 2
-                # Flee north as second to last prio
-                direction_preference[2] = 4
-
+                if (current_pos[0] < closest_wolf_pos[0]):
+                    # Flee north as highest prio
+                    direction_preference[0] = 4
+                    # Flee west as second highest prio
+                    direction_preference[1] = 1
+                    # Flee east as second to last prio
+                    direction_preference[2] = 3
+                    # Flee south as last prio
+                    direction_preference[3] = 2
+                else:
+                    # Flee south as highest prio
+                    direction_preference[0] = 2
+                    # Flee east as second highest prio
+                    direction_preference[1] = 3
+                    # Flee west as second to last prio
+                    direction_preference[2] = 1
+                    # Flee north as last prio
+                    direction_preference[3] = 4
 
         # Set sheeps new position to the highest priority one
         successful_escape = False
